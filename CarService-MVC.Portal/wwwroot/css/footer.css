@@ -1,0 +1,27 @@
+.footer-custom {
+    background: var(--dark);
+    color: rgba(255,255,255,0.7);
+    padding: 3rem 0 1.5rem;
+}
+
+.footer-custom h6 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-custom a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-custom a:hover {
+    color: var(--accent);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}

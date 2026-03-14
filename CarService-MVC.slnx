@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="CarService-MVC.Data/CarService-MVC.Data.csproj" />
+  <Project Path="CarService-MVC.Intranet/CarService-MVC.Intranet.csproj" />
+  <Project Path="CarService-MVC.Portal/CarService-MVC.Portal.csproj" />
 </Solution>

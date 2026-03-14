@@ -1,0 +1,28 @@
+
+.navbar-custom {
+    background: var(--dark);
+    padding: 0.8rem 0;
+}
+
+.navbar-custom .navbar-brand {
+font-weight: 800;
+font-size: 1.5rem;
+color: #fff;
+letter-spacing: -0.5px;
+}
+
+.navbar-custom .navbar-brand i {
+color: var(--primary);
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link.active {
+    color: #fff;
+}

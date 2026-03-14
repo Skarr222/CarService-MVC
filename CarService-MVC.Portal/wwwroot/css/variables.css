@@ -1,0 +1,20 @@
+:root {
+    --primary: #2563eb;
+    --accent: #f59e0b;
+    --dark: #1e293b;
+}
+
+.btn-cta {
+    background: var(--accent);
+    color: var(--dark);
+    font-weight: 700;
+    padding: 0.5rem 1.2rem;
+    border-radius: 0.5rem;
+    border: none;
+    transition: all 0.2s;
+}
+.btn-cta:hover {
+    background: #d97706;
+    color: #fff;
+    transform: translateY(-1px);
+}

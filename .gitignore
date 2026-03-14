@@ -14,8 +14,8 @@ bin/
 obj/
 
 #packages
-CarService-MVC.Intranet/wwwroot/
-CarService-MVC.Portal/wwwroot/
+CarService-MVC.Intranet/wwwroot/lib/
+CarService-MVC.Portal/wwwroot/lib/
 
 # Visual Studio
 .vs/

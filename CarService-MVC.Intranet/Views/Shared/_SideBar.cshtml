@@ -1,0 +1,72 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <a href="/" class="sidebar-brand">
+            <i class="bi bi-wrench-adjustable-circle"></i>
+            <span>AutoSerwis</span>
+        </a>
+        <small class="sidebar-badge">Panel</small>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="sidebar-section">GŁÓWNE</div>
+        <a asp-controller="Home" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
+            <i class="bi bi-grid-1x2"></i> <span>Dashboard</span>
+        </a>
+
+        <div class="sidebar-section">SERWIS</div>
+        <a asp-controller="Client" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Client" ? "active" : "")">
+            <i class="bi bi-people"></i> <span>Klienci</span>
+        </a>
+        <a asp-controller="Vehicle" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vehicle" ? "active" : "")">
+            <i class="bi bi-car-front"></i> <span>Pojazdy</span>
+        </a>
+        <a asp-controller="RepairOrder" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "RepairOrder" ? "active" : "")">
+            <i class="bi bi-clipboard-check"></i> <span>Zlecenia</span>
+        </a>
+        <a asp-controller="Employee" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Employee" ? "active" : "")">
+            <i class="bi bi-person-badge"></i> <span>Pracownicy</span>
+        </a>
+
+        <div class="sidebar-section">OFERTA</div>
+        <a asp-controller="ServiceCategory" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ServiceCategory" ? "active" : "")">
+            <i class="bi bi-folder"></i> <span>Kategorie usług</span>
+        </a>
+        <a asp-controller="Service" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Service" ? "active" : "")">
+            <i class="bi bi-wrench"></i> <span>Usługi</span>
+        </a>
+
+        <div class="sidebar-section">PORTAL</div>
+        <a asp-controller="CmsContent" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "CmsContent" ? "active" : "")">
+            <i class="bi bi-file-earmark-text"></i> <span>Treści CMS</span>
+        </a>
+        <a asp-controller="Testimonial" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Testimonial" ? "active" : "")">
+            <i class="bi bi-star"></i> <span>Opinie</span>
+        </a>
+        <a asp-controller="ContactRequest" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ContactRequest" ? "active" : "")">
+            <i class="bi bi-envelope"></i> <span>Wiadomości</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="sidebar-user-avatar">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <div>
+                <div class="sidebar-user-name">Administrator</div>
+                <div class="sidebar-user-role">Kierownik</div>
+            </div>
+        </div>
+    </div>
+
+</aside>

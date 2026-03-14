@@ -7,6 +7,25 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
+
+
+# Build output
+bin/
+obj/
+
+#packages
+CarService-MVC.Intranet/wwwroot/
+CarService-MVC.Portal/wwwroot/
+
+# Visual Studio
+.vs/
+*.csproj.user
+*.suo
+*.user
+.git/
+.idea/
+.vs/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

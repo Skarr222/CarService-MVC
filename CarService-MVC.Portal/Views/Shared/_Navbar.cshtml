@@ -1,0 +1,47 @@
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-wrench-adjustable-circle"></i> AutoSerwis
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <i class="bi bi-list text-white fs-4"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto me-3 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door"></i> Strona główna
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Services">
+                            <i class="bi bi-gear"></i> Usługi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="About">
+                            <i class="bi bi-people"></i> O nas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Status">
+                            <i class="bi bi-search"></i> Sprawdź status
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Testimonials">
+                            <i class="bi bi-star"></i> Opinie
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Contact">
+                            <i class="bi bi-envelope"></i> Kontakt
+                        </a>
+                    </li>
+                </ul>
+                <a class="btn btn-cta" asp-controller="Home" asp-action="Book">
+                    <i class="bi bi-calendar-check"></i> Umów wizytę
+                </a>
+            </div>
+        </div>
+    </nav>

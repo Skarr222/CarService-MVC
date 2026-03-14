@@ -207,7 +207,7 @@ ContactRequest    (bez FK — standalone)
 
 ## Intranet — funkcjonalności
 
-### CRUD na wszystkich 10 klasach (wymóg: min. 8):
+### CRUD na wszystkich 10 klasach:
 
 | Klasa | Create | Read/List | Update | Delete | Uwagi |
 |-------|--------|-----------|--------|--------|-------|
@@ -230,7 +230,7 @@ ContactRequest    (bez FK — standalone)
 
 ---
 
-## Portal — funkcjonalności (wymóg: min. 6 klas)
+## Portal — funkcjonalności
 
 Klasy używane na Portalu: **Client, Vehicle, RepairOrder, Service, ServiceCategory, CmsContent, Testimonial, ContactRequest**
 
@@ -246,7 +246,7 @@ Klasy używane na Portalu: **Client, Vehicle, RepairOrder, Service, ServiceCateg
 | **Kontakt** | Formularz kontaktowy, mapa, godziny otwarcia, adres | ContactRequest, CmsContent |
 | **O nas** | Opis firmy, zespół | CmsContent, Employee |
 
-### Sterowanie tekstami z Intranetu (wymóg 6 pkt):
+### Sterowanie tekstami z Intranetu:
 
 Każdy tekst na Portalu pochodzi z tabeli `CmsContent`. Przykładowe klucze:
 
@@ -283,67 +283,6 @@ W widoku Razor:
 <p>@Model["home_hero_subtitle"].Content</p>
 ```
 
----
-
-## Dodatkowe elementy (na 20 punktów)
-
-Wybierz 4-5 z poniższych, każdy wart ~4-5 pkt:
-
-### 1. Autoryzacja i role (ASP.NET Identity)
-- Role: Admin, Mechanik, Recepcja
-- Admin widzi wszystko, Mechanik tylko swoje zlecenia, Recepcja zarządza klientami i zleceniami
-- Logowanie / rejestracja / zarządzanie kontami
-
-### 2. Wyszukiwanie i filtrowanie AJAX
-- Dynamiczne filtrowanie tabel bez przeładowania strony
-- Wyszukiwarka klientów/zleceń po frazie
-- Biblioteka: jQuery + AJAX lub fetch API
-
-### 3. Statusy zleceń z historią zmian
-- Nowa tabela `RepairOrderStatusHistory` (Id, RepairOrderId, OldStatus, NewStatus, ChangedBy, ChangedAt, Comment)
-- Timeline zmian statusu widoczny w szczegółach zlecenia
-- Klient na Portalu widzi postęp naprawy
-
-### 4. Generowanie PDF (faktura / potwierdzenie)
-- Po zakończeniu zlecenia — generowanie PDF z podsumowaniem
-- Biblioteka: QuestPDF lub iTextSharp
-- Potwierdzenie umówienia wizyty do pobrania
-
-### 5. Dashboard z wykresami (Chart.js)
-- Liczba zleceń miesięcznie
-- Przychody w czasie
-- Najpopularniejsze usługi
-- Obłożenie mechaników
-
-### 6. Walidacja FluentValidation
-- Zamiast DataAnnotations — FluentValidation
-- Walidacja po stronie serwera + komunikaty po polsku
-- Np. VIN musi mieć 17 znaków, rejestracja w formacie polskim
-
-### 7. Upload zdjęć
-- Mechanik dodaje zdjęcia usterki / naprawy do zlecenia
-- Nowa tabela `RepairPhoto` (Id, RepairOrderId, FilePath, Description, UploadedAt)
-- Galeria w szczegółach zlecenia
-
-### 8. Powiadomienia e-mail
-- Po zmianie statusu zlecenia → mail do klienta
-- Po wypełnieniu formularza kontaktowego → mail do serwisu
-- Biblioteka: MailKit
-
-### 9. AutoComplete / Select2
-- Wyszukiwanie klientów po imieniu/nazwisku z autouzupełnianiem
-- Wybór pojazdu zależny od wybranego klienta (kaskadowe dropdown)
-- Biblioteka: Select2 lub TomSelect
-
-### 10. Eksport danych do Excel
-- Lista zleceń / klientów / przychody do pliku .xlsx
-- Biblioteka: ClosedXML lub EPPlus
-
----
-
-## Enum StatusZlecenia
-
-```csharp
 public enum RepairStatus
 {
     Nowe = 0,

@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Usługi";
+}
+
+<div class="table-card">
+    <div class="table-header">
+        <h5><i class="bi bi-wrench me-2"></i>Lista usług</h5>
+        <a asp-action="Create" class="btn btn-primary-custom btn-sm">
+            <i class="bi bi-plus-lg me-1"></i> Dodaj usługę
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nazwa</th>
+                <th>Kategoria</th>
+                <th>Opis</th>
+                <th>Cena</th>
+                <th>Czas (min)</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

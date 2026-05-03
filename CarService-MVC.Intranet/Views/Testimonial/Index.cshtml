@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Opinie klientów";
+}
+
+<div class="table-card">
+    <div class="table-header">
+        <h5><i class="bi bi-star me-2"></i>Opinie klientów</h5>
+        <a asp-action="Create" class="btn btn-primary-custom btn-sm">
+            <i class="bi bi-plus-lg me-1"></i> Dodaj opinię
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Klient</th>
+                <th>Treść</th>
+                <th>Ocena</th>
+                <th>Zatwierdzona</th>
+                <th>Data</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

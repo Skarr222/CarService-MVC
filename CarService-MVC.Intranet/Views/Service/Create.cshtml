@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Dodaj usługę";
+}
+
+<div class="table-card" style="max-width: 700px;">
+    <div class="table-header">
+        <h5><i class="bi bi-wrench me-2"></i>Dodaj usługę</h5>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Wróć
+        </a>
+    </div>
+    <div class="p-4">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label class="form-label">Kategoria</label>
+                <select name="ServiceCategoryId" class="form-select"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nazwa</label>
+                <input name="Name" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Opis</label>
+                <textarea name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Szacowana cena (zł)</label>
+                    <input name="EstimatedPrice" type="number" step="0.01" class="form-control" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Czas realizacji (min)</label>
+                    <input name="EstimatedDuration" type="number" class="form-control" />
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary-custom">Zapisz</button>
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>

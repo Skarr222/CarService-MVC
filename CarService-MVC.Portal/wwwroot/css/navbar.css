@@ -1,22 +1,21 @@
-
 .navbar-custom {
     background: var(--dark);
     padding: 0.8rem 0;
 }
 
 .navbar-custom .navbar-brand {
-font-weight: 800;
-font-size: 1.5rem;
-color: #fff;
-letter-spacing: -0.5px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: -0.5px;
 }
 
 .navbar-custom .navbar-brand i {
-color: var(--primary);
+    color: var(--primary);
 }
 
 .navbar-custom .nav-link {
-    color: rgba(255,255,255,0.85);
+    color: rgba(255, 255, 255, 0.85);
     font-weight: 500;
     padding: 0.5rem 1rem;
     transition: color 0.2s;
@@ -25,4 +24,85 @@ color: var(--primary);
 .navbar-custom .nav-link:hover,
 .navbar-custom .nav-link.active {
     color: #fff;
+}
+
+.navbar-custom .nav-link.active {
+    border-bottom: 2px solid var(--accent);
+}
+
+.offcanvas-nav {
+    background: var(--dark) !important;
+    color: #fff;
+}
+
+.offcanvas-nav .offcanvas-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.25rem;
+}
+
+.offcanvas-nav .offcanvas-title {
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+
+.offcanvas-nav .offcanvas-title i {
+    color: var(--primary);
+}
+
+@media (max-width: 991.98px) {
+    .offcanvas-nav {
+        max-width: 280px;
+    }
+
+    .offcanvas-nav .offcanvas-body {
+        padding: 1rem 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .offcanvas-nav .navbar-nav {
+        flex-direction: column;
+        align-items: stretch !important;
+        margin: 0 !important;
+    }
+
+    .offcanvas-nav .nav-link {
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+        border-bottom: none !important;
+        border-left: 3px solid transparent;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .offcanvas-nav .nav-link:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+    }
+
+    .offcanvas-nav .nav-link.active {
+        border-bottom: none !important;
+        border-left-color: var(--accent);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .offcanvas-nav .btn-cta {
+        margin: 1rem 1.25rem;
+        text-align: center;
+        display: block;
+    }
+
+    @media (min-width: 992px) and (max-width: 1199.98px) {
+        .navbar-custom .nav-link {
+            padding: 0.5rem 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-cta {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+    }
 }

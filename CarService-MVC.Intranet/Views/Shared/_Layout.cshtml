@@ -20,6 +20,7 @@
 </head>
 <body>
 
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
 <!-- SIDE BAR -->
 <partial name="_SideBar"/>
 <!-- MAIN CONTENT -->
@@ -36,12 +37,7 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-<script>
-    document.getElementById('sidebarToggle')?.addEventListener('click', function () {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.main-wrapper').classList.toggle('expanded');
-    });
-</script>
+<script src="~/js/sidebar.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="Views\Shared\_Navbar.cshtml"/>
+        <AdditionalFiles Include="Views\Shared\_SideBar.cshtml"/>
     </ItemGroup>
 
 </Project>

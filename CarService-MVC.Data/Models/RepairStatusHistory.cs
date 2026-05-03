@@ -9,9 +9,9 @@ public partial class RepairStatusHistory
 
     public int RepairOrderId { get; set; }
 
-    public int OldStatus { get; set; }
+    public RepairOrderStatus OldStatus { get; set; }
 
-    public int NewStatus { get; set; }
+    public RepairOrderStatus NewStatus { get; set; }
 
     public string ChangedBy { get; set; } = null!;
 

@@ -5,12 +5,15 @@
             <span>AutoSerwis</span>
         </a>
         <small class="sidebar-badge">Panel</small>
+        <button class="sidebar-close d-lg-none" id="sidebarClose">
+            <i class="bi bi-x-lg"></i>
+        </button>
     </div>
 
     <nav class="sidebar-nav">
         <div class="sidebar-section">GŁÓWNE</div>
-        <a asp-controller="Home" asp-action="Index"
-           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
+        <a asp-controller="Dashboard" asp-action="Index"
+           class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
             <i class="bi bi-grid-1x2"></i> <span>Dashboard</span>
         </a>
 

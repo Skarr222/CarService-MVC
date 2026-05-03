@@ -1,3 +1,4 @@
+@model List<CarService_MVC.Data.Models.Vehicle>
 @{
     ViewData["Title"] = "Pojazdy";
 }
@@ -23,9 +24,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
-            </tr>
+            @foreach (var vehicle in Model!)
+            {
+                <tr>
+                    <td><strong>@vehicle.Id</strong></td>
+                    <td>@vehicle.Client.FirstName @vehicle.Client.LastName</td>
+                    <td>@vehicle.Brand / @vehicle.Model</td>
+                    <td>@vehicle.Year</td>
+                    <td>@vehicle.LicensePlate</td>
+                    <td>@vehicle.EngineType</td>
+                    <td>
+                        <a asp-controller="Vehicle" asp-action="Edit" asp-route-id="@vehicle.Id"
+                           class="btn-action edit"><i class="bi bi-pencil"></i></a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

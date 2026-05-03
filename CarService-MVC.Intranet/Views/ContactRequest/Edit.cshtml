@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Edytuj wiadomość";
+}
+
+<div class="table-card" style="max-width: 700px;">
+    <div class="table-header">
+        <h5><i class="bi bi-envelope me-2"></i>Edytuj wiadomość</h5>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Wróć
+        </a>
+    </div>
+    <div class="p-4">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" name="Id" />
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Nadawca</label>
+                    <input name="Name" class="form-control" readonly />
+                </div>
+                <div class="col">
+                    <label class="form-label">E-mail</label>
+                    <input name="Email" type="email" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Telefon</label>
+                    <input name="Phone" class="form-control" readonly />
+                </div>
+                <div class="col">
+                    <label class="form-label">Temat</label>
+                    <input name="Subject" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Wiadomość</label>
+                <textarea name="Message" class="form-control" rows="4" readonly></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Notatka odpowiedzi</label>
+                <textarea name="ResponseNote" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input name="IsRead" type="checkbox" class="form-check-input" id="isRead" />
+                    <label class="form-check-label" for="isRead">Oznacz jako przeczytana</label>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary-custom">Zapisz</button>
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>

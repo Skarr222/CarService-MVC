@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Zlecenia napraw";
+}
+
+<div class="table-card">
+    <div class="table-header">
+        <h5><i class="bi bi-clipboard-check me-2"></i>Lista zleceń</h5>
+        <a asp-action="Create" class="btn btn-primary-custom btn-sm">
+            <i class="bi bi-plus-lg me-1"></i> Dodaj zlecenie
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Klient</th>
+                <th>Pojazd</th>
+                <th>Opis</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Koszt</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

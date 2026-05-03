@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Dodaj pojazd";
+}
+
+<div class="table-card" style="max-width: 700px;">
+    <div class="table-header">
+        <h5><i class="bi bi-car-front me-2"></i>Dodaj pojazd</h5>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Wróć
+        </a>
+    </div>
+    <div class="p-4">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label class="form-label">Klient</label>
+                <select name="ClientId" class="form-select"></select>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Marka</label>
+                    <input name="Brand" class="form-control" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Model</label>
+                    <input name="Model" class="form-control" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Rok produkcji</label>
+                    <input name="Year" type="number" class="form-control" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Nr rejestracyjny</label>
+                    <input name="LicensePlate" class="form-control" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">VIN</label>
+                    <input name="Vin" class="form-control" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Typ silnika</label>
+                    <input name="EngineType" class="form-control" />
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary-custom">Zapisz</button>
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>

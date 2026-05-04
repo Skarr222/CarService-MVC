@@ -14,21 +14,23 @@
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Klient</label>
-                    <select name="ClientId" class="form-select"></select>
+                    <select name="ClientId" class="form-select" asp-items="ViewBag.Clients"></select>
                 </div>
                 <div class="col">
                     <label class="form-label">Pojazd</label>
-                    <select name="VehicleId" class="form-select"></select>
+                    <select name="VehicleId" class="form-select" asp-items="ViewBag.Vehicles"></select>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Pracownik</label>
-                    <select name="EmployeeId" class="form-select"></select>
+                    <select name="EmployeeId" class="form-select" asp-items="ViewBag.Employees">
+                        <option value="">— brak —</option>
+                    </select>
                 </div>
                 <div class="col">
                     <label class="form-label">Status</label>
-                    <select name="Status" class="form-select"></select>
+                    <select name="Status" class="form-select" asp-items="ViewBag.Statuses"></select>
                 </div>
             </div>
             <div class="mb-3">

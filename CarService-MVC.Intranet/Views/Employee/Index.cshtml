@@ -1,3 +1,4 @@
+@model List<Employee>
 @{
     ViewData["Title"] = "Pracownicy";
 }
@@ -24,9 +25,37 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
-            </tr>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
+                </tr>
+            }
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td><strong>@employee.Id</strong></td>
+                    <td>@employee.FirstName @employee.LastName</td>
+                    <td>@employee.Position</td>
+                    <td>@employee.Phone</td>
+                    <td>@employee.Email</td>
+                    <td>@employee.HireDate.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (employee.IsActive)
+                        {
+                            <span class="badge-status badge-nowe">Aktywny</span>
+                        }
+                        else
+                        {
+                            <span class="badge-status badge-anulowane">Nieaktywny</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@employee.Id" class="btn-action edit"><i class="bi bi-pencil"></i></a>
+                        <a asp-action="Delete" asp-route-id="@employee.Id" class="btn-action delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

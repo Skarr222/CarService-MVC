@@ -1,3 +1,4 @@
+@model List<RepairOrder>
 @{
     ViewData["Title"] = "Zlecenia napraw";
 }
@@ -24,9 +25,40 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
-            </tr>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
+                </tr>
+            }
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td><strong>@order.Id</strong></td>
+                    <td>@order.Client.FirstName @order.Client.LastName</td>
+                    <td>@order.Vehicle.Brand @order.Vehicle.Model (@order.Vehicle.LicensePlate)</td>
+                    <td>@order.Description</td>
+                    <td>
+                        @{
+                            var badgeClass = order.Status switch
+                            {
+                                RepairOrderStatus.New => "badge-nowe",
+                                RepairOrderStatus.InProgress => "badge-w-trakcie",
+                                RepairOrderStatus.Completed => "badge-zakonczone",
+                                RepairOrderStatus.Cancelled => "badge-anulowane",
+                                _ => ""
+                            };
+                        }
+                        <span class="badge-status @badgeClass">@order.Status</span>
+                    </td>
+                    <td>@order.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td>@(order.TotalCost.HasValue ? order.TotalCost.Value.ToString("C") : "-")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@order.Id" class="btn-action edit"><i class="bi bi-pencil"></i></a>
+                        <a asp-action="Delete" asp-route-id="@order.Id" class="btn-action delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

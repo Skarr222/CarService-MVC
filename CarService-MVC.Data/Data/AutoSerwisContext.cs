@@ -229,7 +229,8 @@ public partial class AutoSerwisContext : DbContext
             entity.Property(e => e.Brand).HasMaxLength(100);
             entity.Property(e => e.EngineType)
                 .HasMaxLength(50)
-                .HasDefaultValue("Benzyna");
+                .HasDefaultValue(EngineType.Benzyna)
+                .HasConversion<string>();
             entity.Property(e => e.LicensePlate).HasMaxLength(20);
             entity.Property(e => e.Model).HasMaxLength(100);
             entity.Property(e => e.Vin)

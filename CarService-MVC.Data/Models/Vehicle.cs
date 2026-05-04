@@ -19,7 +19,7 @@ public partial class Vehicle
 
     public string? Vin { get; set; }
 
-    public string EngineType { get; set; } = null!;
+    public EngineType EngineType { get; set; }
 
     public virtual Client Client { get; set; } = null!;
 

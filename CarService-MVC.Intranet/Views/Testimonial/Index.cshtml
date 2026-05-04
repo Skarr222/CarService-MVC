@@ -1,3 +1,4 @@
+@model List<Testimonial>
 @{
     ViewData["Title"] = "Opinie klientów";
 }
@@ -23,9 +24,41 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
-            </tr>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
+                </tr>
+            }
+            @foreach (var testimonial in Model)
+            {
+                <tr>
+                    <td><strong>@testimonial.Id</strong></td>
+                    <td>@testimonial.ClientName</td>
+                    <td>@testimonial.Content</td>
+                    <td>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="bi bi-star@(i <= testimonial.Rating ? "-fill" : "") text-warning"></i>
+                        }
+                    </td>
+                    <td>
+                        @if (testimonial.IsApproved)
+                        {
+                            <span class="badge-status badge-zakonczone">Tak</span>
+                        }
+                        else
+                        {
+                            <span class="badge-status badge-anulowane">Nie</span>
+                        }
+                    </td>
+                    <td>@testimonial.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@testimonial.Id" class="btn-action edit"><i class="bi bi-pencil"></i></a>
+                        <a asp-action="Delete" asp-route-id="@testimonial.Id" class="btn-action delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

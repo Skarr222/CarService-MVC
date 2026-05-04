@@ -1,3 +1,4 @@
+@model List<CmsContent>
 @{
     ViewData["Title"] = "Treści CMS";
 }
@@ -24,9 +25,37 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
-            </tr>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
+                </tr>
+            }
+            @foreach (var content in Model)
+            {
+                <tr>
+                    <td><strong>@content.Id</strong></td>
+                    <td><code>@content.Key</code></td>
+                    <td>@content.Title</td>
+                    <td>@content.Section</td>
+                    <td>@content.SortOrder</td>
+                    <td>
+                        @if (content.IsActive)
+                        {
+                            <span class="badge-status badge-zakonczone">Tak</span>
+                        }
+                        else
+                        {
+                            <span class="badge-status badge-anulowane">Nie</span>
+                        }
+                    </td>
+                    <td>@content.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@content.Id" class="btn-action edit"><i class="bi bi-pencil"></i></a>
+                        <a asp-action="Delete" asp-route-id="@content.Id" class="btn-action delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

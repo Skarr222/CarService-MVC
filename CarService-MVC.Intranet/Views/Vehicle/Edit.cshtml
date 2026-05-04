@@ -1,3 +1,4 @@
+@model Vehicle
 @{
     ViewData["Title"] = "Edytuj pojazd";
 }
@@ -11,39 +12,39 @@
     </div>
     <div class="p-4">
         <form asp-action="Edit" method="post">
-            <input type="hidden" name="Id" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <div class="mb-3">
                 <label class="form-label">Klient</label>
-                <select name="ClientId" class="form-select"></select>
+                <select name="ClientId" class="form-select" asp-items="ViewBag.Clients"></select>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Marka</label>
-                    <input name="Brand" class="form-control" />
+                    <input name="Brand" class="form-control" value="@Model.Brand" />
                 </div>
                 <div class="col">
                     <label class="form-label">Model</label>
-                    <input name="Model" class="form-control" />
+                    <input name="Model" class="form-control" value="@Model.Model" />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Rok produkcji</label>
-                    <input name="Year" type="number" class="form-control" />
+                    <input name="Year" type="number" class="form-control" value="@Model.Year" />
                 </div>
                 <div class="col">
                     <label class="form-label">Nr rejestracyjny</label>
-                    <input name="LicensePlate" class="form-control" />
+                    <input name="LicensePlate" class="form-control" value="@Model.LicensePlate" />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">VIN</label>
-                    <input name="Vin" class="form-control" />
+                    <input name="Vin" class="form-control" value="@Model.Vin" />
                 </div>
                 <div class="col">
                     <label class="form-label">Typ silnika</label>
-                    <input name="EngineType" class="form-control" />
+                    <select name="EngineType" class="form-select" asp-items="ViewBag.EngineTypes"></select>
                 </div>
             </div>
             <div class="d-flex gap-2">

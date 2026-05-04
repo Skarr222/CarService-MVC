@@ -1,3 +1,4 @@
+@model ContactRequest
 @{
     ViewData["Title"] = "Edytuj wiadomość";
 }
@@ -11,38 +12,38 @@
     </div>
     <div class="p-4">
         <form asp-action="Edit" method="post">
-            <input type="hidden" name="Id" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Nadawca</label>
-                    <input name="Name" class="form-control" readonly />
+                    <input name="Name" class="form-control" value="@Model.Name" readonly />
                 </div>
                 <div class="col">
                     <label class="form-label">E-mail</label>
-                    <input name="Email" type="email" class="form-control" readonly />
+                    <input name="Email" type="email" class="form-control" value="@Model.Email" readonly />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Telefon</label>
-                    <input name="Phone" class="form-control" readonly />
+                    <input name="Phone" class="form-control" value="@Model.Phone" readonly />
                 </div>
                 <div class="col">
                     <label class="form-label">Temat</label>
-                    <input name="Subject" class="form-control" readonly />
+                    <input name="Subject" class="form-control" value="@Model.Subject" readonly />
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Wiadomość</label>
-                <textarea name="Message" class="form-control" rows="4" readonly></textarea>
+                <textarea name="Message" class="form-control" rows="4" readonly>@Model.Message</textarea>
             </div>
             <div class="mb-3">
                 <label class="form-label">Notatka odpowiedzi</label>
-                <textarea name="ResponseNote" class="form-control" rows="3"></textarea>
+                <textarea name="ResponseNote" class="form-control" rows="3">@Model.ResponseNote</textarea>
             </div>
             <div class="mb-3">
                 <div class="form-check">
-                    <input name="IsRead" type="checkbox" class="form-check-input" id="isRead" />
+                    <input name="IsRead" type="checkbox" class="form-check-input" id="isRead" @(Model.IsRead ? "checked" : "") />
                     <label class="form-check-label" for="isRead">Oznacz jako przeczytana</label>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+@model CmsContent
 @{
     ViewData["Title"] = "Edytuj treść CMS";
 }
@@ -11,33 +12,33 @@
     </div>
     <div class="p-4">
         <form asp-action="Edit" method="post">
-            <input type="hidden" name="Id" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Klucz</label>
-                    <input name="Key" class="form-control" />
+                    <input name="Key" class="form-control" value="@Model.Key" />
                 </div>
                 <div class="col">
                     <label class="form-label">Sekcja</label>
-                    <input name="Section" class="form-control" />
+                    <input name="Section" class="form-control" value="@Model.Section" />
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Tytuł</label>
-                <input name="Title" class="form-control" />
+                <input name="Title" class="form-control" value="@Model.Title" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Treść</label>
-                <textarea name="Content" class="form-control" rows="5"></textarea>
+                <textarea name="Content" class="form-control" rows="5">@Model.Content</textarea>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Kolejność</label>
-                    <input name="SortOrder" type="number" class="form-control" />
+                    <input name="SortOrder" type="number" class="form-control" value="@Model.SortOrder" />
                 </div>
                 <div class="col d-flex align-items-end">
                     <div class="form-check mb-2">
-                        <input name="IsActive" type="checkbox" class="form-check-input" id="isActive" />
+                        <input name="IsActive" type="checkbox" class="form-check-input" id="isActive" @(Model.IsActive ? "checked" : "") />
                         <label class="form-check-label" for="isActive">Aktywny</label>
                     </div>
                 </div>

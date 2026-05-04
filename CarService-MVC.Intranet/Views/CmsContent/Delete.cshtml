@@ -1,3 +1,4 @@
+@model CmsContent
 @{
     ViewData["Title"] = "Usuń treść CMS";
 }
@@ -8,8 +9,9 @@
     </div>
     <div class="p-4">
         <p class="text-muted">Czy na pewno chcesz usunąć tę treść? Operacja jest nieodwracalna.</p>
+        <p><strong>@Model.Key</strong> — @Model.Title (@Model.Section)</p>
         <form asp-action="DeleteConfirmed" method="post">
-            <input type="hidden" name="id" />
+            <input type="hidden" name="id" value="@Model.Id" />
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-danger">Usuń</button>
                 <a asp-action="Index" class="btn btn-secondary">Anuluj</a>

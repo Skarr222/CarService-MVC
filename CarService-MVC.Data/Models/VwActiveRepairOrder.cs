@@ -19,7 +19,7 @@ public partial class VwActiveRepairOrder
 
     public string Description { get; set; } = null!;
 
-    public int Status { get; set; }
+    public RepairOrderStatus Status { get; set; }
 
     public string? StatusName { get; set; }
 

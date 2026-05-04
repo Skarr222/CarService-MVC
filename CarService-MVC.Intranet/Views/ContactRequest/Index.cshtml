@@ -1,3 +1,4 @@
+@model List<ContactRequest>
 @{
     ViewData["Title"] = "Wiadomości";
 }
@@ -20,9 +21,36 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
-            </tr>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
+                </tr>
+            }
+            @foreach (var request in Model)
+            {
+                <tr class="@(!request.IsRead ? "fw-semibold" : "")">
+                    <td><strong>@request.Id</strong></td>
+                    <td>@request.Name</td>
+                    <td>@request.Email</td>
+                    <td>@request.Subject</td>
+                    <td>@request.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        @if (request.IsRead)
+                        {
+                            <span class="badge-status badge-zakonczone">Przeczytana</span>
+                        }
+                        else
+                        {
+                            <span class="badge-status badge-nowe">Nowa</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@request.Id" class="btn-action edit"><i class="bi bi-pencil"></i></a>
+                        <a asp-action="Delete" asp-route-id="@request.Id" class="btn-action delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

@@ -1,3 +1,4 @@
+@model Employee
 @{
     ViewData["Title"] = "Edytuj pracownika";
 }
@@ -11,39 +12,39 @@
     </div>
     <div class="p-4">
         <form asp-action="Edit" method="post">
-            <input type="hidden" name="Id" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Imię</label>
-                    <input name="FirstName" class="form-control" />
+                    <input name="FirstName" class="form-control" value="@Model.FirstName" />
                 </div>
                 <div class="col">
                     <label class="form-label">Nazwisko</label>
-                    <input name="LastName" class="form-control" />
+                    <input name="LastName" class="form-control" value="@Model.LastName" />
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Stanowisko</label>
-                <input name="Position" class="form-control" />
+                <input name="Position" class="form-control" value="@Model.Position" />
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Telefon</label>
-                    <input name="Phone" class="form-control" />
+                    <input name="Phone" class="form-control" value="@Model.Phone" />
                 </div>
                 <div class="col">
                     <label class="form-label">E-mail</label>
-                    <input name="Email" type="email" class="form-control" />
+                    <input name="Email" type="email" class="form-control" value="@Model.Email" />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Data zatrudnienia</label>
-                    <input name="HireDate" type="date" class="form-control" />
+                    <input name="HireDate" type="date" class="form-control" value="@Model.HireDate.ToString("yyyy-MM-dd")" />
                 </div>
                 <div class="col d-flex align-items-end">
                     <div class="form-check mb-2">
-                        <input name="IsActive" type="checkbox" class="form-check-input" id="isActive" />
+                        <input name="IsActive" type="checkbox" class="form-check-input" id="isActive" @(Model.IsActive ? "checked" : "") />
                         <label class="form-check-label" for="isActive">Aktywny</label>
                     </div>
                 </div>

@@ -1,3 +1,5 @@
+using CarService_MVC.Data.Models;
+
 namespace CarService_MVC.Intranet.Models;
 
 public class VehicleViewModel
@@ -9,6 +11,6 @@ public class VehicleViewModel
     public int Year { get; set; }
     public string LicensePlate { get; set; } = string.Empty;
     public string? Vin { get; set; }
-    public string EngineType { get; set; } = string.Empty;
+    public EngineType EngineType { get; set; }
     public string ClientFullName { get; set; } = string.Empty;
 }

@@ -73,7 +73,6 @@ public class VehicleController : Controller
     }
 
     [HttpPost]
-    [ActionName("Delete")]
     public IActionResult DeleteConfirmed(int id)
     {
         var vehicle = dbAutoSerwisContext.Vehicles.Find(id);

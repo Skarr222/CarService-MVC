@@ -1,0 +1,22 @@
+@model Client
+@{
+    ViewData["Title"] = "Usuń klienta";
+    Layout = "_Layout";
+}
+
+<div class="table-card">
+    <div class="table-header">
+        <h5><i class="bi bi-trash me-2"></i>Usuń klienta</h5>
+    </div>
+    <div class="p-4">
+        <p class="text-muted">Czy na pewno chcesz usunąć tego klienta? Operacja jest nieodwracalna.</p>
+        <p><strong>@Model.FirstName @Model.LastName</strong> — @Model.Email</p>
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Usuń</button>
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>

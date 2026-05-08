@@ -75,9 +75,12 @@ public class ServiceController : Controller
     [HttpPost]
     public IActionResult DeleteConfirmed(int id)
     {
-        var service = dbAutoSerwisContext.Services.Find(id);
+        var service = dbAutoSerwisContext.Services
+            .Include(s => s.RepairOrderServices)
+            .FirstOrDefault(s => s.Id == id);
         if (service != null)
         {
+            dbAutoSerwisContext.RepairOrderServices.RemoveRange(service.RepairOrderServices);
             dbAutoSerwisContext.Services.Remove(service);
             dbAutoSerwisContext.SaveChanges();
         }

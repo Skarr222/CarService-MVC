@@ -1,4 +1,3 @@
-using System.Globalization;
 using CarService_MVC.Data.Data;
 using CarService_MVC.Data.Models;
 using CarService_MVC.Intranet.Helpers;
@@ -31,11 +30,11 @@ public class RepairOrderController : Controller
 
     public IActionResult Create()
     {
-        ViewBag.Clients = RepairOrderDropdowns.Clients(dbAutoSerwisContext);
-        ViewBag.Vehicles = RepairOrderDropdowns.Vehicles(dbAutoSerwisContext);
-        ViewBag.Employees = RepairOrderDropdowns.Employees(dbAutoSerwisContext);
-        ViewBag.Statuses = RepairOrderDropdowns.Statuses();
-        ViewBag.Services = RepairOrderDropdowns.Services(dbAutoSerwisContext);
+        ViewBag.Clients        = RepairOrderDropdowns.Clients(dbAutoSerwisContext);
+        ViewBag.VehicleOptions = RepairOrderDropdowns.VehicleOptions(dbAutoSerwisContext);
+        ViewBag.Employees      = RepairOrderDropdowns.Employees(dbAutoSerwisContext);
+        ViewBag.Statuses       = RepairOrderDropdowns.Statuses();
+        ViewBag.Services       = RepairOrderDropdowns.Services(dbAutoSerwisContext);
         return View();
     }
 
@@ -43,6 +42,9 @@ public class RepairOrderController : Controller
     public IActionResult Create(RepairOrder model, List<int> ServiceIds)
     {
         model.CreatedAt = DateTime.Now;
+        model.TotalCost = ServiceIds.Sum(serviceId =>
+            FormParser.UnitPrice(Request.Form[$"ServicePrice_{serviceId}"]) *
+            FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]));
         dbAutoSerwisContext.RepairOrders.Add(model);
         dbAutoSerwisContext.SaveChanges();
 
@@ -51,9 +53,10 @@ public class RepairOrderController : Controller
             {
                 RepairOrderId = model.Id,
                 ServiceId = serviceId,
-                Quantity = ParseFormQuantity(serviceId),
-                UnitPrice = ParseFormUnitPrice(serviceId)
+                Quantity  = FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]),
+                UnitPrice = FormParser.UnitPrice(Request.Form[$"ServicePrice_{serviceId}"])
             });
+
         if (ServiceIds.Any())
             dbAutoSerwisContext.SaveChanges();
 
@@ -88,7 +91,9 @@ public class RepairOrderController : Controller
         order.Status = model.Status;
         order.PlannedDate = model.PlannedDate;
         order.CompletedAt = model.CompletedAt;
-        order.TotalCost = model.TotalCost;
+        order.TotalCost = ServiceIds.Sum(serviceId =>
+            FormParser.UnitPrice(Request.Form[$"ServicePrice_{serviceId}"]) *
+            FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]));
         order.Notes = model.Notes;
 
         dbAutoSerwisContext.RepairOrderServices.RemoveRange(order.RepairOrderServices);
@@ -97,11 +102,12 @@ public class RepairOrderController : Controller
             {
                 RepairOrderId = order.Id,
                 ServiceId = serviceId,
-                Quantity = ParseFormQuantity(serviceId),
-                UnitPrice = ParseFormUnitPrice(serviceId)
+                Quantity  = FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]),
+                UnitPrice = FormParser.UnitPrice(Request.Form[$"ServicePrice_{serviceId}"])
             });
 
         dbAutoSerwisContext.SaveChanges();
+
         return RedirectToAction("Index");
     }
 
@@ -128,19 +134,4 @@ public class RepairOrderController : Controller
         return RedirectToAction("Index");
     }
 
-    private int ParseFormQuantity(int serviceId)
-    {
-        int.TryParse(Request.Form[$"ServiceQty_{serviceId}"], out var quantity);
-        return quantity >= 1 ? quantity : 1;
-    }
-
-    private decimal ParseFormUnitPrice(int serviceId)
-    {
-        decimal.TryParse(
-            Request.Form[$"ServicePrice_{serviceId}"],
-            NumberStyles.Any,
-            CultureInfo.InvariantCulture,
-            out var price);
-        return price;
-    }
 }

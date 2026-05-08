@@ -3,6 +3,9 @@
     font-weight: 600;
     padding: 0.3rem 0.75rem;
     border-radius: 50px;
+    display: inline-block;
+    min-width: 7rem;
+    text-align: center;
 }
 
 .badge-nowe {

@@ -19,6 +19,13 @@ public class RepairOrderViewModel
     public string VehicleInfo { get; set; } = string.Empty;
 }
 
+public class VehicleOption
+{
+    public int Id { get; set; }
+    public int ClientId { get; set; }
+    public string Name { get; set; } = string.Empty;
+}
+
 public class ServiceSelectionItem
 {
     public int ServiceId { get; set; }

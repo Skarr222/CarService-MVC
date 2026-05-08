@@ -1,4 +1,3 @@
-using System.Globalization;
 using CarService_MVC.Data.Data;
 using CarService_MVC.Data.Models;
 using CarService_MVC.Intranet.Models;
@@ -33,6 +32,17 @@ public static class RepairOrderDropdowns
                 .OrderBy(vehicle => vehicle.Brand)
                 .Select(vehicle => new { vehicle.Id, Name = vehicle.Brand + " " + vehicle.Model + " (" + vehicle.LicensePlate + ")" }),
             "Id", "Name", selectedId);
+
+    public static List<VehicleOption> VehicleOptions(AutoSerwisContext db) =>
+        db.Vehicles
+            .OrderBy(vehicle => vehicle.Brand)
+            .Select(vehicle => new VehicleOption
+            {
+                Id       = vehicle.Id,
+                ClientId = vehicle.ClientId,
+                Name     = vehicle.Brand + " " + vehicle.Model + " (" + vehicle.LicensePlate + ")"
+            })
+            .ToList();
 
     public static SelectList Employees(AutoSerwisContext db, int? selectedId = null) =>
         new SelectList(

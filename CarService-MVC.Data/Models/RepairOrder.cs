@@ -13,7 +13,7 @@ public partial class RepairOrder
 
     public int? EmployeeId { get; set; }
 
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; }
 
     public RepairOrderStatus Status { get; set; }
 

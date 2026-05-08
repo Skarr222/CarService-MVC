@@ -1,7 +1,9 @@
-@using CarService_MVC.Intranet.Models
+@using System.Globalization
 @{
     ViewData["Title"] = "Dodaj zlecenie";
     var services = ViewBag.Services as List<ServiceSelectionItem> ?? new List<ServiceSelectionItem>();
+    var vehicleOptions = ViewBag.VehicleOptions as List<VehicleOption> ?? new List<VehicleOption>();
+    var clientOptions = ViewBag.Clients as SelectList ?? new SelectList(Enumerable.Empty<object>());
 }
 
 <div class="table-card">
@@ -16,18 +18,30 @@
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Klient</label>
-                    <select name="ClientId" class="form-select" asp-items="ViewBag.Clients"></select>
+                    <select name="ClientId" id="clientSelect" class="form-select">
+                        <option value="">Wybierz klienta</option>
+                        @foreach (var item in clientOptions)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
                 </div>
                 <div class="col">
                     <label class="form-label">Pojazd</label>
-                    <select name="VehicleId" class="form-select" asp-items="ViewBag.Vehicles"></select>
+                    <select name="VehicleId" id="vehicleSelect" class="form-select">
+                        <option value="">Wybierz pojazd</option>
+                        @foreach (var vehicle in vehicleOptions)
+                        {
+                            <option value="@vehicle.Id" data-client-id="@vehicle.ClientId">@vehicle.Name</option>
+                        }
+                    </select>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Pracownik</label>
                     <select name="EmployeeId" class="form-select" asp-items="ViewBag.Employees">
-                        <option value="">— brak —</option>
+                        <option value="">Wybierz pracownika</option>
                     </select>
                 </div>
                 <div class="col">
@@ -36,7 +50,7 @@
                 </div>
                 <div class="col">
                     <label class="form-label">Planowana data</label>
-                    <input name="PlannedDate" type="date" class="form-control" />
+                    <input name="PlannedDate" type="date" class="form-control"/>
                 </div>
             </div>
             <div class="mb-3">
@@ -49,13 +63,13 @@
                     <label class="form-label fw-semibold">Usługi</label>
                     <table class="table table-sm table-bordered" id="servicesTable">
                         <thead class="table-light">
-                            <tr>
-                                <th style="width:2rem"></th>
-                                <th>Kategoria / Usługa</th>
-                                <th style="width:8rem">Cena jedn. (zł)</th>
-                                <th style="width:6rem">Ilość</th>
-                                <th style="width:8rem" class="text-end">Wartość</th>
-                            </tr>
+                        <tr>
+                            <th style="width:2rem"></th>
+                            <th>Kategoria / Usługa</th>
+                            <th style="width:8rem">Cena jedn. (zł)</th>
+                            <th style="width:6rem">Ilość</th>
+                            <th style="width:8rem" class="text-end">Wartość</th>
+                        </tr>
                         </thead>
                         <tbody>
                         @foreach (var s in services)
@@ -63,20 +77,20 @@
                             <tr data-service-row>
                                 <td class="text-center">
                                     <input type="checkbox" name="ServiceIds" value="@s.ServiceId"
-                                           class="form-check-input svc-check" />
+                                           class="form-check-input svc-check"/>
                                 </td>
                                 <td>
-                                    <small class="text-muted">@s.CategoryName</small><br />
+                                    <small class="text-muted">@s.CategoryName</small><br/>
                                     @s.Name
                                 </td>
                                 <td>
                                     <input type="number" name="ServicePrice_@s.ServiceId"
-                                           value="@s.EstimatedPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"
-                                           step="0.01" min="0" class="form-control form-control-sm svc-price" />
+                                           value="@s.EstimatedPrice.ToString("F2", CultureInfo.InvariantCulture)"
+                                           step="0.01" min="0" class="form-control form-control-sm svc-price"/>
                                 </td>
                                 <td>
                                     <input type="number" name="ServiceQty_@s.ServiceId"
-                                           value="1" min="1" class="form-control form-control-sm svc-qty" />
+                                           value="1" min="1" class="form-control form-control-sm svc-qty"/>
                                 </td>
                                 <td class="text-end align-middle svc-line">—</td>
                             </tr>
@@ -92,14 +106,8 @@
             <div class="row mb-4 align-items-end">
                 <div class="col-auto ms-auto" style="min-width:220px">
                     <label class="form-label fw-semibold">Koszt całkowity (zł)</label>
-                    <div class="input-group">
-                        <input name="TotalCost" id="totalCost" type="number" step="0.01" min="0"
-                               class="form-control" placeholder="0.00" />
-                        <button type="button" class="btn btn-outline-secondary" id="recalcBtn" title="Przelicz z usług">
-                            <i class="bi bi-arrow-clockwise"></i>
-                        </button>
-                    </div>
-                    <small class="text-muted">Aktualizuje się automatycznie po wyborze usług</small>
+                    <input name="TotalCost" id="totalCost" type="text" readonly
+                           class="form-control-plaintext fw-semibold fs-5" value="0.00 zł"/>
                 </div>
             </div>
             <div class="d-flex gap-2">
@@ -111,5 +119,6 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/RepairOrder/client-vehicle-filter.js" asp-append-version="true"></script>
     <script src="~/js/RepairOrder/services-calc.js" asp-append-version="true"></script>
 }

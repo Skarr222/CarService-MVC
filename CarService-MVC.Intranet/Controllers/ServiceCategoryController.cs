@@ -69,9 +69,15 @@ public class ServiceCategoryController : Controller
     [HttpPost]
     public IActionResult DeleteConfirmed(int id)
     {
-        var category = dbAutoSerwisContext.ServiceCategories.Find(id);
+        var category = dbAutoSerwisContext.ServiceCategories
+            .Include(c => c.Services)
+            .ThenInclude(s => s.RepairOrderServices)
+            .FirstOrDefault(c => c.Id == id);
         if (category != null)
         {
+            foreach (var service in category.Services)
+                dbAutoSerwisContext.RepairOrderServices.RemoveRange(service.RepairOrderServices);
+            dbAutoSerwisContext.Services.RemoveRange(category.Services);
             dbAutoSerwisContext.ServiceCategories.Remove(category);
             dbAutoSerwisContext.SaveChanges();
         }

@@ -1,7 +1,7 @@
 using CarService_MVC.Data.Data;
 using CarService_MVC.Data.Models;
+using CarService_MVC.Intranet.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarService_MVC.Intranet.Controllers;
@@ -29,7 +29,8 @@ public class VehicleController : Controller
 
     public IActionResult Create()
     {
-        PopulateDropdowns();
+        ViewBag.Clients     = VehicleDropdowns.Clients(dbAutoSerwisContext);
+        ViewBag.EngineTypes = VehicleDropdowns.EngineTypes();
         return View();
     }
 
@@ -45,7 +46,8 @@ public class VehicleController : Controller
     {
         var vehicle = dbAutoSerwisContext.Vehicles.Find(id);
         if (vehicle == null) return NotFound();
-        PopulateDropdowns(vehicle.ClientId, vehicle.EngineType);
+        ViewBag.Clients     = VehicleDropdowns.Clients(dbAutoSerwisContext, vehicle.ClientId);
+        ViewBag.EngineTypes = VehicleDropdowns.EngineTypes(vehicle.EngineType);
         return View(vehicle);
     }
 
@@ -84,17 +86,5 @@ public class VehicleController : Controller
             dbAutoSerwisContext.SaveChanges();
         }
         return RedirectToAction("Index");
-    }
-
-    private void PopulateDropdowns(int? selectedClientId = null, EngineType? selectedEngineType = null)
-    {
-        ViewBag.Clients = new SelectList(
-            dbAutoSerwisContext.Clients.Where(c => c.IsActive).OrderBy(c => c.LastName)
-                .Select(c => new { c.Id, Name = c.FirstName + " " + c.LastName }),
-            "Id", "Name", selectedClientId);
-
-        ViewBag.EngineTypes = new SelectList(
-            Enum.GetValues<EngineType>().Select(e => new { Value = e.ToString(), Text = e.ToString() }),
-            "Value", "Text", selectedEngineType?.ToString());
     }
 }

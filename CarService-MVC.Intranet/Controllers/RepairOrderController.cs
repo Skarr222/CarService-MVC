@@ -1,8 +1,8 @@
+using System.Globalization;
 using CarService_MVC.Data.Data;
 using CarService_MVC.Data.Models;
-using CarService_MVC.Intranet.Models;
+using CarService_MVC.Intranet.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarService_MVC.Intranet.Controllers;
@@ -31,7 +31,11 @@ public class RepairOrderController : Controller
 
     public IActionResult Create()
     {
-        PopulateDropdowns();
+        ViewBag.Clients = RepairOrderDropdowns.Clients(dbAutoSerwisContext);
+        ViewBag.Vehicles = RepairOrderDropdowns.Vehicles(dbAutoSerwisContext);
+        ViewBag.Employees = RepairOrderDropdowns.Employees(dbAutoSerwisContext);
+        ViewBag.Statuses = RepairOrderDropdowns.Statuses();
+        ViewBag.Services = RepairOrderDropdowns.Services(dbAutoSerwisContext);
         return View();
     }
 
@@ -43,17 +47,13 @@ public class RepairOrderController : Controller
         dbAutoSerwisContext.SaveChanges();
 
         foreach (var serviceId in ServiceIds)
-        {
-            var qty = int.TryParse(Request.Form[$"ServiceQty_{serviceId}"], out var q) ? q : 1;
-            var unitPrice = decimal.TryParse(Request.Form[$"ServicePrice_{serviceId}"], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var p) ? p : 0;
             dbAutoSerwisContext.RepairOrderServices.Add(new RepairOrderService
             {
                 RepairOrderId = model.Id,
                 ServiceId = serviceId,
-                Quantity = qty < 1 ? 1 : qty,
-                UnitPrice = unitPrice
+                Quantity = ParseFormQuantity(serviceId),
+                UnitPrice = ParseFormUnitPrice(serviceId)
             });
-        }
         if (ServiceIds.Any())
             dbAutoSerwisContext.SaveChanges();
 
@@ -66,7 +66,11 @@ public class RepairOrderController : Controller
             .Include(r => r.RepairOrderServices)
             .FirstOrDefault(r => r.Id == id);
         if (order == null) return NotFound();
-        PopulateDropdowns(order.ClientId, order.VehicleId, order.EmployeeId, order.Status, order.RepairOrderServices);
+        ViewBag.Clients = RepairOrderDropdowns.Clients(dbAutoSerwisContext, order.ClientId);
+        ViewBag.Vehicles = RepairOrderDropdowns.Vehicles(dbAutoSerwisContext, order.VehicleId);
+        ViewBag.Employees = RepairOrderDropdowns.Employees(dbAutoSerwisContext, order.EmployeeId);
+        ViewBag.Statuses = RepairOrderDropdowns.Statuses((int?)order.Status);
+        ViewBag.Services = RepairOrderDropdowns.Services(dbAutoSerwisContext, order.RepairOrderServices);
         return View(order);
     }
 
@@ -89,17 +93,13 @@ public class RepairOrderController : Controller
 
         dbAutoSerwisContext.RepairOrderServices.RemoveRange(order.RepairOrderServices);
         foreach (var serviceId in ServiceIds)
-        {
-            var qty = int.TryParse(Request.Form[$"ServiceQty_{serviceId}"], out var q) ? q : 1;
-            var unitPrice = decimal.TryParse(Request.Form[$"ServicePrice_{serviceId}"], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var p) ? p : 0;
             dbAutoSerwisContext.RepairOrderServices.Add(new RepairOrderService
             {
                 RepairOrderId = order.Id,
                 ServiceId = serviceId,
-                Quantity = qty < 1 ? 1 : qty,
-                UnitPrice = unitPrice
+                Quantity = ParseFormQuantity(serviceId),
+                UnitPrice = ParseFormUnitPrice(serviceId)
             });
-        }
 
         dbAutoSerwisContext.SaveChanges();
         return RedirectToAction("Index");
@@ -124,52 +124,23 @@ public class RepairOrderController : Controller
             dbAutoSerwisContext.RepairOrders.Remove(order);
             dbAutoSerwisContext.SaveChanges();
         }
+
         return RedirectToAction("Index");
     }
 
-    private void PopulateDropdowns(int? selectedClientId = null, int? selectedVehicleId = null, int? selectedEmployeeId = null, RepairOrderStatus? selectedStatus = null, IEnumerable<RepairOrderService>? existingServices = null)
+    private int ParseFormQuantity(int serviceId)
     {
-        ViewBag.Clients = new SelectList(
-            dbAutoSerwisContext.Clients.Where(c => c.IsActive).OrderBy(c => c.LastName).Select(c => new { c.Id, Name = c.FirstName + " " + c.LastName }),
-            "Id", "Name", selectedClientId);
+        int.TryParse(Request.Form[$"ServiceQty_{serviceId}"], out var quantity);
+        return quantity >= 1 ? quantity : 1;
+    }
 
-        ViewBag.Vehicles = new SelectList(
-            dbAutoSerwisContext.Vehicles.OrderBy(v => v.Brand).Select(v => new { v.Id, Name = v.Brand + " " + v.Model + " (" + v.LicensePlate + ")" }),
-            "Id", "Name", selectedVehicleId);
-
-        ViewBag.Employees = new SelectList(
-            dbAutoSerwisContext.Employees.Where(e => e.IsActive).OrderBy(e => e.LastName).Select(e => new { e.Id, Name = e.FirstName + " " + e.LastName }),
-            "Id", "Name", selectedEmployeeId);
-
-        var statusLabels = new Dictionary<RepairOrderStatus, string>
-        {
-            { RepairOrderStatus.New,       "Nowe" },
-            { RepairOrderStatus.InProgress,"W trakcie" },
-            { RepairOrderStatus.Completed, "Zakończone" },
-            { RepairOrderStatus.Cancelled, "Anulowane" },
-            { RepairOrderStatus.Ready,     "Gotowe" },
-            { RepairOrderStatus.Released,  "Wydane" },
-        };
-        ViewBag.Statuses = new SelectList(
-            Enum.GetValues<RepairOrderStatus>().Select(s => new { Value = (int)s, Text = statusLabels[s] }),
-            "Value", "Text", (int?)selectedStatus);
-
-        var existingMap = existingServices?.ToDictionary(s => s.ServiceId, s => s) ?? new Dictionary<int, RepairOrderService>();
-        ViewBag.Services = dbAutoSerwisContext.Services
-            .Include(s => s.ServiceCategory)
-            .OrderBy(s => s.ServiceCategory.Name)
-            .ThenBy(s => s.Name)
-            .ToList()
-            .Select(s => new ServiceSelectionItem
-            {
-                ServiceId = s.Id,
-                Name = s.Name,
-                CategoryName = s.ServiceCategory.Name,
-                EstimatedPrice = s.EstimatedPrice,
-                IsSelected = existingMap.ContainsKey(s.Id),
-                Quantity = existingMap.TryGetValue(s.Id, out var ex) ? ex.Quantity : 1,
-                UnitPrice = existingMap.TryGetValue(s.Id, out var ex2) ? ex2.UnitPrice : s.EstimatedPrice
-            })
-            .ToList();
+    private decimal ParseFormUnitPrice(int serviceId)
+    {
+        decimal.TryParse(
+            Request.Form[$"ServicePrice_{serviceId}"],
+            NumberStyles.Any,
+            CultureInfo.InvariantCulture,
+            out var price);
+        return price;
     }
 }

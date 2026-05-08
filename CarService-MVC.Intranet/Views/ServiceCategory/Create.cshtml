@@ -1,5 +1,13 @@
 @{
     ViewData["Title"] = "Dodaj kategorię";
+    var availableIcons = new[]
+    {
+        "bi-wrench", "bi-wrench-adjustable", "bi-tools", "bi-gear", "bi-gear-wide-connected",
+        "bi-car-front", "bi-car-front-fill", "bi-truck", "bi-fuel-pump", "bi-speedometer2",
+        "bi-disc", "bi-lightning-charge", "bi-battery-half", "bi-thermometer-half",
+        "bi-droplet", "bi-wind", "bi-snow", "bi-sun", "bi-fire", "bi-cpu",
+        "bi-shield-check", "bi-clipboard-check", "bi-hammer", "bi-stars", "bi-camera"
+    };
 }
 
 <div class="table-card">
@@ -23,13 +31,7 @@
                 <label class="form-label">Ikona</label>
                 <input type="hidden" name="IconCss" id="iconCssInput" value="" />
                 <div id="iconPicker" class="d-flex flex-wrap gap-2 p-3 border rounded bg-light">
-                    @foreach (var icon in new[] {
-                        "bi-wrench","bi-wrench-adjustable","bi-tools","bi-gear","bi-gear-wide-connected",
-                        "bi-car-front","bi-car-front-fill","bi-truck","bi-fuel-pump","bi-speedometer2",
-                        "bi-disc","bi-lightning-charge","bi-battery-half","bi-thermometer-half",
-                        "bi-droplet","bi-wind","bi-snow","bi-sun","bi-fire","bi-cpu",
-                        "bi-shield-check","bi-clipboard-check","bi-hammer","bi-stars","bi-camera"
-                    })
+                    @foreach (var icon in availableIcons)
                     {
                         <button type="button" class="btn btn-outline-secondary icon-opt" data-icon="bi @icon" title="@icon">
                             <i class="bi @icon fs-5"></i>
@@ -45,23 +47,10 @@
     </div>
 </div>
 
-<script>
-(function () {
-    var input = document.getElementById('iconCssInput');
+@section Styles {
+    <link rel="stylesheet" href="~/css/ServiceCategory/icon-picker.css" asp-append-version="true" />
+}
 
-    document.querySelectorAll('.icon-opt').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.icon-opt').forEach(function (b) {
-                b.classList.remove('icon-opt-selected');
-            });
-            this.classList.add('icon-opt-selected');
-            input.value = this.dataset.icon;
-        });
-    });
-})();
-</script>
-
-<style>
-    .icon-opt { width: 2.8rem; height: 2.8rem; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
-    .icon-opt-selected { background-color: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(37,99,235,.25); }
-</style>
+@section Scripts {
+    <script src="~/js/ServiceCategory/icon-picker.js" asp-append-version="true"></script>
+}

@@ -44,7 +44,8 @@
                 </div>
                 <div class="col d-flex align-items-end">
                     <div class="form-check mb-2">
-                        <input name="IsActive" type="checkbox" class="form-check-input" id="isActive" @(Model.IsActive ? "checked" : "") />
+                        <input name="IsActive" type="checkbox" value="true" class="form-check-input" id="isActive" @(Model.IsActive ? "checked" : "") />
+                        <input type="hidden" name="IsActive" value="false" />
                         <label class="form-check-label" for="isActive">Aktywny</label>
                     </div>
                 </div>

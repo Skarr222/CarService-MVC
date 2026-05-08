@@ -20,7 +20,8 @@ public class ClientController : Controller
     {
         var clients = dbAutoSerwisContext.Clients
             .Include(c => c.Vehicles)
-            .OrderByDescending(c => c.CreatedAt)
+            .OrderBy(c => c.LastName)
+            .ThenBy(c => c.FirstName)
             .ToList();
         return View(clients);
     }

@@ -23,13 +23,28 @@
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <label class="form-label">Ocena (1-5)</label>
-                    <input name="Rating" type="number" min="1" max="5" class="form-control" value="@Model.Rating" />
+                    <label class="form-label">Status zatwierdzenia</label>
+                    <select name="IsApproved" class="form-select">
+                        @if (Model.IsApproved)
+                        {
+                            <option value="true" selected>Zatwierdzona</option>
+                            <option value="false">Oczekuje</option>
+                        }
+                        else
+                        {
+                            <option value="true">Zatwierdzona</option>
+                            <option value="false" selected>Oczekuje</option>
+                        }
+                    </select>
                 </div>
-                <div class="col d-flex align-items-end">
-                    <div class="form-check mb-2">
-                        <input name="IsApproved" type="checkbox" class="form-check-input" id="isApproved" @(Model.IsApproved ? "checked" : "") />
-                        <label class="form-check-label" for="isApproved">Zatwierdzona</label>
+                <div class="col">
+                    <label class="form-label">Ocena</label>
+                    <input type="hidden" name="Rating" value="@Model.Rating" />
+                    <div class="form-control-plaintext">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="bi bi-star@(i <= Model.Rating ? "-fill" : "") text-warning fs-5"></i>
+                        }
                     </div>
                 </div>
             </div>

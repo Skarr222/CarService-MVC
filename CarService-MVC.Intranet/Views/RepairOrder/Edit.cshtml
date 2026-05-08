@@ -1,6 +1,8 @@
 @model RepairOrder
+@using CarService_MVC.Intranet.Models
 @{
     ViewData["Title"] = "Edytuj zlecenie";
+    var services = ViewBag.Services as List<ServiceSelectionItem> ?? new List<ServiceSelectionItem>();
 }
 
 <div class="table-card">
@@ -34,24 +36,73 @@
                     <label class="form-label">Status</label>
                     <select name="Status" class="form-select" asp-items="ViewBag.Statuses"></select>
                 </div>
+                <div class="col">
+                    <label class="form-label">Planowana data</label>
+                    <input name="PlannedDate" type="date" class="form-control" value="@Model.PlannedDate?.ToString("yyyy-MM-dd")" />
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Opis</label>
                 <textarea name="Description" class="form-control" rows="3">@Model.Description</textarea>
             </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label class="form-label">Planowana data</label>
-                    <input name="PlannedDate" type="date" class="form-control" value="@Model.PlannedDate?.ToString("yyyy-MM-dd")" />
+            @if (services.Any())
+            {
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Usługi</label>
+                    <table class="table table-sm table-bordered" id="servicesTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:2rem"></th>
+                                <th>Kategoria / Usługa</th>
+                                <th style="width:8rem">Cena jedn. (zł)</th>
+                                <th style="width:6rem">Ilość</th>
+                                <th style="width:8rem" class="text-end">Wartość</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var s in services)
+                        {
+                            <tr data-service-row>
+                                <td class="text-center">
+                                    <input type="checkbox" name="ServiceIds" value="@s.ServiceId"
+                                           class="form-check-input svc-check" @(s.IsSelected ? "checked" : "") />
+                                </td>
+                                <td>
+                                    <small class="text-muted">@s.CategoryName</small><br />
+                                    @s.Name
+                                </td>
+                                <td>
+                                    <input type="number" name="ServicePrice_@s.ServiceId"
+                                           value="@s.UnitPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"
+                                           step="0.01" min="0" class="form-control form-control-sm svc-price" />
+                                </td>
+                                <td>
+                                    <input type="number" name="ServiceQty_@s.ServiceId"
+                                           value="@s.Quantity" min="1" class="form-control form-control-sm svc-qty" />
+                                </td>
+                                <td class="text-end align-middle svc-line">—</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col">
-                    <label class="form-label">Koszt całkowity</label>
-                    <input name="TotalCost" type="number" step="0.01" class="form-control" value="@Model.TotalCost" />
-                </div>
-            </div>
+            }
             <div class="mb-3">
                 <label class="form-label">Uwagi</label>
                 <textarea name="Notes" class="form-control" rows="2">@Model.Notes</textarea>
+            </div>
+            <div class="row mb-4 align-items-end">
+                <div class="col-auto ms-auto" style="min-width:220px">
+                    <label class="form-label fw-semibold">Koszt całkowity (zł)</label>
+                    <div class="input-group">
+                        <input name="TotalCost" id="totalCost" type="number" step="0.01" min="0"
+                               class="form-control" value="@Model.TotalCost" />
+                        <button type="button" class="btn btn-outline-secondary" id="recalcBtn" title="Przelicz z usług">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                    <small class="text-muted">Aktualizuje się automatycznie po wyborze usług</small>
+                </div>
             </div>
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary-custom">Zapisz</button>
@@ -60,3 +111,30 @@
         </form>
     </div>
 </div>
+
+<script>
+(function () {
+    function calcTotal() {
+        var total = 0;
+        document.querySelectorAll('[data-service-row]').forEach(function (row) {
+            var cb = row.querySelector('.svc-check');
+            var price = parseFloat(row.querySelector('.svc-price').value) || 0;
+            var qty = parseInt(row.querySelector('.svc-qty').value) || 0;
+            var line = price * qty;
+            row.querySelector('.svc-line').textContent = cb.checked ? line.toFixed(2) + ' zł' : '—';
+            if (cb.checked) total += line;
+        });
+        document.getElementById('totalCost').value = total > 0 ? total.toFixed(2) : '';
+    }
+
+    document.querySelectorAll('.svc-check, .svc-price, .svc-qty').forEach(function (el) {
+        el.addEventListener('change', calcTotal);
+        el.addEventListener('input', calcTotal);
+    });
+
+    document.getElementById('recalcBtn')?.addEventListener('click', calcTotal);
+
+    // inicjalizacja — przelicz od razu przy załadowaniu strony
+    calcTotal();
+})();
+</script>

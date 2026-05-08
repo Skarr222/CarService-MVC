@@ -40,16 +40,18 @@
                     <td>@order.Description</td>
                     <td>
                         @{
-                            var badgeClass = order.Status switch
+                            var (badgeClass, badgeLabel) = order.Status switch
                             {
-                                RepairOrderStatus.New => "badge-nowe",
-                                RepairOrderStatus.InProgress => "badge-w-trakcie",
-                                RepairOrderStatus.Completed => "badge-zakonczone",
-                                RepairOrderStatus.Cancelled => "badge-anulowane",
-                                _ => ""
+                                RepairOrderStatus.New       => ("badge-nowe",       "Nowe"),
+                                RepairOrderStatus.InProgress=> ("badge-wtrakcie",   "W trakcie"),
+                                RepairOrderStatus.Completed => ("badge-gotowe",     "Zakończone"),
+                                RepairOrderStatus.Cancelled => ("badge-anulowane",  "Anulowane"),
+                                RepairOrderStatus.Ready     => ("badge-gotowe",     "Gotowe"),
+                                RepairOrderStatus.Released  => ("badge-wydane",     "Wydane"),
+                                _                           => ("badge-nowe",       ((int)order.Status).ToString())
                             };
                         }
-                        <span class="badge-status @badgeClass">@order.Status</span>
+                        <span class="badge-status @badgeClass">@badgeLabel</span>
                     </td>
                     <td>@order.CreatedAt.ToString("dd.MM.yyyy")</td>
                     <td>@(order.TotalCost.HasValue ? order.TotalCost.Value.ToString("C") : "-")</td>

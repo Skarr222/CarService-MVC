@@ -15,6 +15,7 @@
                 <th>Nadawca</th>
                 <th>E-mail</th>
                 <th>Temat</th>
+                <th>Notatka</th>
                 <th>Data</th>
                 <th>Status</th>
                 <th>Akcje</th>
@@ -34,11 +35,14 @@
                     <td>@request.Name</td>
                     <td>@request.Email</td>
                     <td>@request.Subject</td>
-                    <td>@request.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td class="text-muted" style="max-width:180px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
+                        @(string.IsNullOrEmpty(request.ResponseNote) ? "—" : (request.ResponseNote.Length > 40 ? request.ResponseNote[..40] + "…" : request.ResponseNote))
+                    </td>
+                    <td>@request.CreatedAt.ToString("dd.MM.yyyy")</td>
                     <td>
                         @if (request.IsRead)
                         {
-                            <span class="badge-status badge-zakonczone">Przeczytana</span>
+                            <span class="badge-status badge-wydane">Przeczytana</span>
                         }
                         else
                         {

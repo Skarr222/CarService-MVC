@@ -21,6 +21,8 @@ public class VehicleController : Controller
     {
         var vehicles = dbAutoSerwisContext.Vehicles
             .Include(v => v.Client)
+            .OrderBy(v => v.Brand)
+            .ThenBy(v => v.Model)
             .ToList();
         return View(vehicles);
     }

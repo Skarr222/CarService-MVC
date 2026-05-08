@@ -16,34 +16,35 @@
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Nadawca</label>
-                    <input name="Name" class="form-control" value="@Model.Name" readonly />
+                    <input class="form-control" value="@Model.Name" disabled />
                 </div>
                 <div class="col">
                     <label class="form-label">E-mail</label>
-                    <input name="Email" type="email" class="form-control" value="@Model.Email" readonly />
+                    <input type="email" class="form-control" value="@Model.Email" disabled />
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Telefon</label>
-                    <input name="Phone" class="form-control" value="@Model.Phone" readonly />
+                    <input class="form-control" value="@Model.Phone" disabled />
                 </div>
                 <div class="col">
                     <label class="form-label">Temat</label>
-                    <input name="Subject" class="form-control" value="@Model.Subject" readonly />
+                    <input class="form-control" value="@Model.Subject" disabled />
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Wiadomość</label>
-                <textarea name="Message" class="form-control" rows="4" readonly>@Model.Message</textarea>
+                <textarea class="form-control" rows="4" disabled>@Model.Message</textarea>
             </div>
             <div class="mb-3">
-                <label class="form-label">Notatka odpowiedzi</label>
+                <label class="form-label">Notatka</label>
                 <textarea name="ResponseNote" class="form-control" rows="3">@Model.ResponseNote</textarea>
             </div>
             <div class="mb-3">
                 <div class="form-check">
-                    <input name="IsRead" type="checkbox" class="form-check-input" id="isRead" @(Model.IsRead ? "checked" : "") />
+                    <input name="IsRead" type="checkbox" value="true" class="form-check-input" id="isRead" @(Model.IsRead ? "checked" : "") />
+                    <input type="hidden" name="IsRead" value="false" />
                     <label class="form-check-label" for="isRead">Oznacz jako przeczytana</label>
                 </div>
             </div>

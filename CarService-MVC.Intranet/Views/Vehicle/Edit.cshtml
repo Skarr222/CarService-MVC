@@ -39,8 +39,8 @@
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <label class="form-label">VIN</label>
-                    <input name="Vin" class="form-control" value="@Model.Vin" />
+                    <label class="form-label">VIN <small class="text-muted">(max 17 znaków)</small></label>
+                    <input name="Vin" class="form-control" maxlength="17" value="@Model.Vin" />
                 </div>
                 <div class="col">
                     <label class="form-label">Typ silnika</label>

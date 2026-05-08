@@ -18,3 +18,14 @@ public class RepairOrderViewModel
     public string ClientFullName { get; set; } = string.Empty;
     public string VehicleInfo { get; set; } = string.Empty;
 }
+
+public class ServiceSelectionItem
+{
+    public int ServiceId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string CategoryName { get; set; } = string.Empty;
+    public decimal EstimatedPrice { get; set; }
+    public bool IsSelected { get; set; }
+    public int Quantity { get; set; } = 1;
+    public decimal UnitPrice { get; set; }
+}

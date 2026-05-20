@@ -1,0 +1,189 @@
+@model List<Testimonial>
+@{
+    ViewData["Title"] = "Opinie";
+    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
+    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
+
+    double avgRating = Model.Any() ? Math.Round(Model.Average(t => t.Rating), 1) : 0;
+    int totalCount = Model.Count;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home/testimonials.css" asp-append-version="true" />
+}
+
+<!-- Page Hero -->
+<section class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom mb-3">
+                <li class="breadcrumb-item"><a asp-action="Index">Strona główna</a></li>
+                <li class="breadcrumb-item active">Opinie</li>
+            </ol>
+        </nav>
+        <h1 class="fade-up">Co mówią <span>klienci</span></h1>
+        <p class="fade-up fade-up-delay-1">
+            @Cms("intro.subtitle")
+        </p>
+    </div>
+</section>
+
+<!-- Stats Bar -->
+@if (Model.Any())
+{
+    <section class="stats-bar">
+        <div class="container">
+            <div class="row justify-content-center g-4">
+                <div class="col-auto">
+                    <div class="rating-big">
+                        <div class="rating-number">@avgRating.ToString("0.0")</div>
+                        <div class="rating-stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= Math.Floor(avgRating))
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+                                else if (i - avgRating < 1 && i - avgRating > 0)
+                                {
+                                    <i class="bi bi-star-half"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star"></i>
+                                }
+                            }
+                        </div>
+                        <div class="rating-label">Średnia ocena</div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <div class="stats-divider"></div>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <div class="text-center">
+                        <div class="stat-big-number">@totalCount</div>
+                        <div class="stat-big-label">Opinii klientów</div>
+                    </div>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <div class="stats-divider"></div>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <div class="text-center">
+                        <div class="stat-big-number">@Model.Count(t => t.Rating == 5)</div>
+                        <div class="stat-big-label">Ocen 5 gwiazdek</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Testimonials Grid -->
+<section class="testimonials-section">
+    <div class="container">
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="bi bi-star"></i>
+                <h5>Brak opinii do wyświetlenia</h5>
+                <p>Wróć wkrótce — opinie są aktualnie moderowane.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var (t, idx) in Model.Select((t, i) => (t, i)))
+                {
+                    <div class="col-md-6 col-lg-4 fade-up" style="animation-delay:@(idx * 0.08)s">
+                        <div class="testimonial-card-pro">
+                            <div class="tc-header">
+                                <div class="tc-avatar">
+                                    @t.ClientName.Substring(0, 1).ToUpper()
+                                </div>
+                                <div>
+                                    <div class="tc-name">@t.ClientName</div>
+                                    <div class="tc-date">@t.CreatedAt.ToString("MMMM yyyy", new System.Globalization.CultureInfo("pl-PL"))</div>
+                                </div>
+                            </div>
+                            <div class="tc-stars">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="bi @(i <= t.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                }
+                            </div>
+                            <p class="tc-content">@t.Content</p>
+                            <i class="bi bi-quote tc-quote-icon"></i>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Add Testimonial Form -->
+<section class="add-testimonial-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 fade-up">
+                <div class="add-testimonial-card">
+                    <div class="add-testimonial-header">
+                        <i class="bi bi-star"></i>
+                        <div>
+                            <h4>Podziel się opinią</h4>
+                            <p>Twoja opinia pojawi się po weryfikacji przez nasz zespół.</p>
+                        </div>
+                    </div>
+
+                    @if (TempData["TestimonialSuccess"] != null)
+                    {
+                        <div class="portal-alert portal-alert-success">
+                            <i class="bi bi-check-circle-fill me-2"></i> @TempData["TestimonialSuccess"]
+                        </div>
+                    }
+                    @if (TempData["TestimonialError"] != null)
+                    {
+                        <div class="portal-alert portal-alert-error">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["TestimonialError"]
+                        </div>
+                    }
+
+                    <form asp-action="AddTestimonial" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Imię i nazwisko <span class="required">*</span></label>
+                                <input type="text" name="clientName" class="form-input-custom"
+                                       placeholder="Jan Kowalski" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Ocena <span class="required">*</span></label>
+                                <div class="star-rating-input">
+                                    @for (int i = 5; i >= 1; i--)
+                                    {
+                                        <input type="radio" name="rating" id="star@(i)" value="@i" @(i == 5 ? "checked" : "") />
+                                        <label for="star@(i)" title="@i gwiazdki">
+                                            <i class="bi bi-star-fill"></i>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label-custom">Treść opinii <span class="required">*</span></label>
+                                <textarea name="content" class="form-input-custom" rows="4"
+                                          placeholder="Opisz swoje doświadczenia z naszym serwisem..." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-submit-testimonial">
+                                    <i class="bi bi-send"></i> Wyślij opinię
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

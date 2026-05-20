@@ -1,11 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Strona główna";
+    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
+    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
 }
 
 @section Styles {
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap"
-        rel="stylesheet"/>
     <link rel="stylesheet" href="~/css/home/index.css" asp-append-version="true"/>
 }
 
@@ -22,8 +21,7 @@
                     w <span>dobrych rękach</span>
                 </h1>
                 <p class="lead mt-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam.
+                    @Cms("hero.lead")
                 </p>
                 <div class="d-flex gap-3 mt-4">
                     <a asp-controller="Home" asp-action="Book" class="btn-cta-lg">
@@ -56,8 +54,7 @@
                         </div>
                         <h5 class="fw-bold">Gwarancja na naprawy</h5>
                         <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel
-                            consectetur interdum.
+                            @Cms("hero.guarantee.desc")
                         </p>
                     </div>
                     <div class="hero-card">
@@ -66,8 +63,7 @@
                         </div>
                         <h5 class="fw-bold">Szybka realizacja</h5>
                         <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur.
+                            @Cms("hero.fast.desc")
                         </p>
                     </div>
                 </div>
@@ -76,13 +72,13 @@
     </div>
 </section>
 
-<!-- ===== DLACZEGO MY ===== -->
+
 <section class="section-why">
     <div class="container">
         <div class="text-center mb-5 fade-up">
             <h2 class="section-title">Dlaczego <span>my</span>?</h2>
             <p class="section-subtitle mx-auto mt-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
+                @Cms("why.subtitle")
             </p>
         </div>
         <div class="row g-4">
@@ -92,8 +88,7 @@
                         <i class="bi bi-award"></i>
                     </div>
                     <h5>Doświadczenie</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in
-                        faucibus.</p>
+                    <p>@Cms("why.experience")</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 fade-up fade-up-delay-2">
@@ -102,8 +97,7 @@
                         <i class="bi bi-shield-check"></i>
                     </div>
                     <h5>Gwarancja 12 mies.</h5>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo.</p>
+                    <p>@Cms("why.guarantee")</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 fade-up fade-up-delay-3">
@@ -112,8 +106,7 @@
                         <i class="bi bi-cash-stack"></i>
                     </div>
                     <h5>Uczciwe ceny</h5>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur.</p>
+                    <p>@Cms("why.prices")</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 fade-up fade-up-delay-4">
@@ -122,21 +115,20 @@
                         <i class="bi bi-speedometer2"></i>
                     </div>
                     <h5>Szybka realizacja</h5>
-                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                        est.</p>
+                    <p>@Cms("why.speed")</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ===== USŁUGI ===== -->
+
 <section class="section-services">
     <div class="container">
         <div class="text-center mb-5 fade-up">
             <h2 class="section-title">Nasze <span>usługi</span></h2>
             <p class="section-subtitle mx-auto mt-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus.
+                @Cms("services.subtitle")
             </p>
         </div>
         <div class="row g-4">
@@ -203,15 +195,14 @@
     </div>
 </section>
 
-<!-- ===== CTA ===== -->
+
 <section class="section-cta">
     <div class="container position-relative" style="z-index:1;">
         <div class="row align-items-center">
             <div class="col-lg-7 fade-up">
                 <h2>Potrzebujesz naprawy?<br/>Umów się <span style="color: var(--accent);">już dziś</span></h2>
                 <p class="mt-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua.
+                    @Cms("cta.text")
                 </p>
             </div>
             <div class="col-lg-5 text-lg-end mt-4 mt-lg-0 fade-up fade-up-delay-2">
@@ -226,13 +217,13 @@
     </div>
 </section>
 
-<!-- ===== OPINIE ===== -->
+
 <section class="section-testimonials">
     <div class="container">
         <div class="text-center mb-5 fade-up">
             <h2 class="section-title">Co mówią <span>klienci</span></h2>
             <p class="section-subtitle mx-auto mt-3">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique.
+                @Cms("testimonials.subtitle")
             </p>
         </div>
         <div class="row g-4">

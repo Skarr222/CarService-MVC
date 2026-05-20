@@ -1,0 +1,196 @@
+@using CarService_MVC.Data.Models
+@{
+    ViewData["Title"] = "Umów wizytę";
+    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
+    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
+    string? error = ViewBag.Error;
+    var categories = (List<ServiceCategory>)(ViewBag.ServiceCategories ?? new List<ServiceCategory>());
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home/book.css" asp-append-version="true" />
+}
+
+<!-- Page Hero -->
+<section class="page-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom mb-3">
+                <li class="breadcrumb-item"><a asp-action="Index">Strona główna</a></li>
+                <li class="breadcrumb-item active">Umów wizytę</li>
+            </ol>
+        </nav>
+        <h1 class="fade-up">Umów <span>wizytę</span></h1>
+        <p class="fade-up fade-up-delay-1">
+            @Cms("intro.subtitle")
+        </p>
+    </div>
+</section>
+
+<!-- Booking Section -->
+<section class="book-section">
+    <div class="container">
+        <div class="row g-5 justify-content-center">
+
+            <!-- Form -->
+            <div class="col-lg-7 fade-up">
+                <div class="book-form-card">
+                    <div class="book-form-header">
+                        <i class="bi bi-calendar-check"></i>
+                        <div>
+                            <h4>Formularz rezerwacji</h4>
+                            <p>Zadzwonimy, żeby potwierdzić termin.</p>
+                        </div>
+                    </div>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="portal-alert portal-alert-success">
+                            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(error))
+                    {
+                        <div class="portal-alert portal-alert-error">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> @error
+                        </div>
+                    }
+
+                    <form asp-action="Book" method="post">
+                        <div class="row g-3">
+
+                            <!-- Dane kontaktowe -->
+                            <div class="col-12">
+                                <div class="form-section-label">
+                                    <i class="bi bi-person"></i> Dane kontaktowe
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Imię i nazwisko <span class="required">*</span></label>
+                                <input type="text" name="name" class="form-input-custom"
+                                       placeholder="Jan Kowalski" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">E-mail <span class="required">*</span></label>
+                                <input type="email" name="email" class="form-input-custom"
+                                       placeholder="jan@example.com" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Telefon kontaktowy</label>
+                                <input type="tel" name="phone" class="form-input-custom"
+                                       placeholder="+48 600 100 200" />
+                            </div>
+
+                            <!-- Dane pojazdu -->
+                            <div class="col-12 mt-2">
+                                <div class="form-section-label">
+                                    <i class="bi bi-car-front"></i> Dane pojazdu
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Marka</label>
+                                <input type="text" name="carMake" class="form-input-custom"
+                                       placeholder="np. Toyota" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Model</label>
+                                <input type="text" name="carModel" class="form-input-custom"
+                                       placeholder="np. Corolla" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Tablica rejestracyjna</label>
+                                <input type="text" name="licensePlate" class="form-input-custom"
+                                       placeholder="np. WA 12345" style="text-transform:uppercase;" />
+                            </div>
+
+                            <!-- Usługa i termin -->
+                            <div class="col-12 mt-2">
+                                <div class="form-section-label">
+                                    <i class="bi bi-wrench"></i> Usługa i termin
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label-custom">Kategoria usługi</label>
+                                <select name="serviceCategory" class="form-input-custom">
+                                    <option value="">-- Wybierz kategorię --</option>
+                                    @foreach (var cat in categories)
+                                    {
+                                        <option value="@cat.Name">@cat.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Preferowana data</label>
+                                <input type="date" name="preferredDate" class="form-input-custom"
+                                       min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Preferowana godzina</label>
+                                <select name="preferredTime" class="form-input-custom">
+                                    <option value="">-- Wybierz godzinę --</option>
+                                    <option>8:00</option>
+                                    <option>9:00</option>
+                                    <option>10:00</option>
+                                    <option>11:00</option>
+                                    <option>12:00</option>
+                                    <option>13:00</option>
+                                    <option>14:00</option>
+                                    <option>15:00</option>
+                                    <option>16:00</option>
+                                    <option>17:00</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label-custom">Dodatkowe uwagi</label>
+                                <textarea name="message" class="form-input-custom" rows="3"
+                                          placeholder="Opisz problem lub dodaj inne informacje..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-submit-book">
+                                    <i class="bi bi-calendar-check"></i> Wyślij rezerwację
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info sidebar -->
+            <div class="col-lg-4 fade-up fade-up-delay-2">
+                <div class="book-info-card mb-3">
+                    <i class="bi bi-clock book-info-icon"></i>
+                    <h6>Czas odpowiedzi</h6>
+                    <p>@Cms("info.response")</p>
+                </div>
+                <div class="book-info-card mb-3">
+                    <i class="bi bi-car-front book-info-icon"></i>
+                    <h6>Bezpłatna diagnoza</h6>
+                    <p>@Cms("info.diagnosis")</p>
+                </div>
+                <div class="book-info-card mb-3">
+                    <i class="bi bi-shield-check book-info-icon"></i>
+                    <h6>Gwarancja na naprawy</h6>
+                    <p>@Cms("info.guarantee")</p>
+                </div>
+                <div class="book-hours-card">
+                    <h6><i class="bi bi-calendar3"></i> Godziny otwarcia</h6>
+                    <ul class="hours-list">
+                        <li>
+                            <span>Poniedziałek – Piątek</span>
+                            <strong>8:00 – 18:00</strong>
+                        </li>
+                        <li>
+                            <span>Sobota</span>
+                            <strong>9:00 – 14:00</strong>
+                        </li>
+                        <li class="closed">
+                            <span>Niedziela</span>
+                            <strong>nieczynne</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,124 @@
+/* ===== SERVICES PAGE ===== */
+
+.services-full-section {
+    padding: 4rem 0 5rem;
+    background: #f8fafc;
+}
+
+/* Category Block */
+.category-block {
+    background: #fff;
+    border-radius: 1.25rem;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: box-shadow 0.3s;
+}
+.category-block:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.category-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.category-icon-wrap {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 0.875rem;
+    background: linear-gradient(135deg, var(--primary), #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.category-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.25rem;
+}
+
+.category-desc {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+/* Service Item Card */
+.service-item-card {
+    background: #f8fafc;
+    border-radius: 0.875rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #e8eef4;
+    height: 100%;
+    transition: all 0.2s;
+}
+.service-item-card:hover {
+    background: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.08);
+    transform: translateY(-2px);
+}
+
+.service-item-name {
+    font-weight: 700;
+    color: var(--dark);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.price-badge {
+    background: linear-gradient(135deg, var(--primary), #3b82f6);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.service-item-desc {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.service-item-meta {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+.service-item-meta i {
+    color: var(--accent);
+    margin-right: 3px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: #94a3b8;
+}
+.empty-state i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+.empty-state h5 {
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}

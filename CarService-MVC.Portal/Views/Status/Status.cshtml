@@ -1,78 +1,40 @@
 @model List<RepairOrder>
 @{
     ViewData["Title"] = "Status naprawy";
-    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
-    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
+    var cms = CmsHelper.FromViewBag(ViewData);
 
-    bool showResults    = ViewBag.ShowResults == true;
+    bool showResults = ViewBag.ShowResults == true;
     string? verifyPhone = ViewBag.VerifyPhone;
     string? verifyError = ViewBag.VerifyError;
     string? statusError = ViewBag.StatusError;
-
-    string StatusLabel(RepairOrderStatus s) => s switch
-    {
-        RepairOrderStatus.New        => "Nowe",
-        RepairOrderStatus.InProgress => "W trakcie",
-        RepairOrderStatus.Completed  => "Zakończone",
-        RepairOrderStatus.Cancelled  => "Anulowane",
-        RepairOrderStatus.Ready      => "Gotowe do odbioru",
-        RepairOrderStatus.Released   => "Wydane",
-        _                            => s.ToString()
-    };
-    string StatusClass(RepairOrderStatus s) => s switch
-    {
-        RepairOrderStatus.New        => "status-new",
-        RepairOrderStatus.InProgress => "status-inprogress",
-        RepairOrderStatus.Completed  => "status-completed",
-        RepairOrderStatus.Cancelled  => "status-cancelled",
-        RepairOrderStatus.Ready      => "status-ready",
-        RepairOrderStatus.Released   => "status-released",
-        _                            => ""
-    };
-    string StatusIcon(RepairOrderStatus s) => s switch
-    {
-        RepairOrderStatus.New        => "bi-plus-circle",
-        RepairOrderStatus.InProgress => "bi-wrench",
-        RepairOrderStatus.Completed  => "bi-check-circle",
-        RepairOrderStatus.Cancelled  => "bi-x-circle",
-        RepairOrderStatus.Ready      => "bi-bell",
-        RepairOrderStatus.Released   => "bi-car-front",
-        _                            => "bi-circle"
-    };
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/home/status.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/status.css" asp-append-version="true"/>
 }
 
-<!-- Page Hero -->
 <section class="page-hero status-hero">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-custom mb-3">
-                <li class="breadcrumb-item"><a asp-action="Index">Strona główna</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Strona główna</a></li>
                 <li class="breadcrumb-item active">Status naprawy</li>
             </ol>
         </nav>
         <h1 class="fade-up">Sprawdź <span>status</span> naprawy</h1>
         <p class="fade-up fade-up-delay-1">
-            @Cms("intro.subtitle")
+            @cms.Get("intro.subtitle")
         </p>
     </div>
 </section>
-
-<!-- Content -->
 <section class="status-results-section">
     <div class="container">
-
         @if (showResults)
         {
-
             <div class="verify-success-bar fade-up">
                 <i class="bi bi-check-circle-fill"></i>
                 Tożsamość potwierdzona — wyświetlamy Twoje zlecenia.
             </div>
-
             @if (!Model.Any())
             {
                 <div class="no-results">
@@ -86,19 +48,18 @@
                 <p class="results-count fade-up">
                     Znaleziono <strong>@Model.Count</strong> @(Model.Count == 1 ? "zlecenie" : "zlecenia/zleceń")
                 </p>
-
-                @foreach (var (order, idx) in Model.Select((o, i) => (o, i)))
+                @foreach (var (order, idx) in Model.Select((order, index) => (order, index)))
                 {
-                    <div class="order-card fade-up" style="animation-delay:@(idx * 0.1)s">
+                    <div class="order-card fade-up" style="@AnimationHelper.AnimDelay(idx)">
                         <div class="order-card-header">
                             <div class="d-flex align-items-center gap-3 flex-wrap">
                                 <div class="vehicle-badge">
                                     <i class="bi bi-car-front-fill"></i>
                                     @order.Vehicle.Brand @order.Vehicle.Model
                                 </div>
-                                <span class="status-pill @StatusClass(order.Status)">
-                                    <i class="bi @StatusIcon(order.Status)"></i>
-                                    @StatusLabel(order.Status)
+                                <span class="status-pill @RepairOrderHelper.StatusClass(order.Status)">
+                                    <i class="bi @RepairOrderHelper.StatusIcon(order.Status)"></i>
+                                    @RepairOrderHelper.StatusLabel(order.Status)
                                 </span>
                             </div>
                             <div class="order-meta">
@@ -106,18 +67,19 @@
                                 <span><i class="bi bi-calendar3"></i> @order.CreatedAt.ToString("dd.MM.yyyy")</span>
                                 @if (order.PlannedDate.HasValue)
                                 {
-                                    <span><i class="bi bi-calendar-check"></i> Planowana: @order.PlannedDate.Value.ToString("dd.MM.yyyy")</span>
+                                    <span><i
+                                            class="bi bi-calendar-check"></i> Planowana: @order.PlannedDate.Value.ToString("dd.MM.yyyy")</span>
                                 }
                             </div>
                         </div>
-
                         <div class="order-card-body">
                             <div class="row g-4">
                                 <div class="col-lg-7">
                                     @if (!string.IsNullOrEmpty(order.Description))
                                     {
                                         <div class="order-section">
-                                            <h6 class="order-section-title"><i class="bi bi-file-text"></i> Opis zlecenia</h6>
+                                            <h6 class="order-section-title"><i class="bi bi-file-text"></i> Opis
+                                                zlecenia</h6>
                                             <p class="order-description">@order.Description</p>
                                         </div>
                                     }
@@ -131,7 +93,8 @@
                                                     <div class="service-row">
                                                         <span class="service-row-name">@ros.Service.Name</span>
                                                         <span class="service-row-qty">×@ros.Quantity</span>
-                                                        <span class="service-row-price">@((ros.UnitPrice * ros.Quantity).ToString("N2")) zł</span>
+                                                        <span
+                                                            class="service-row-price">@((ros.UnitPrice * ros.Quantity).ToString("N2")) zł</span>
                                                     </div>
                                                 }
                                             </div>
@@ -148,15 +111,18 @@
                                     @if (order.RepairStatusHistories.Any())
                                     {
                                         <div class="order-section">
-                                            <h6 class="order-section-title"><i class="bi bi-clock-history"></i> Historia statusów</h6>
+                                            <h6 class="order-section-title"><i class="bi bi-clock-history"></i> Historia
+                                                statusów</h6>
                                             <div class="timeline">
                                                 @foreach (var hist in order.RepairStatusHistories.OrderBy(h => h.ChangedAt))
                                                 {
                                                     <div class="timeline-item">
                                                         <div class="timeline-dot"></div>
                                                         <div class="timeline-content">
-                                                            <div class="timeline-date">@hist.ChangedAt.ToString("dd.MM.yyyy HH:mm")</div>
-                                                            <div class="timeline-label">@StatusLabel((RepairOrderStatus)hist.NewStatus)</div>
+                                                            <div
+                                                                class="timeline-date">@hist.ChangedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                                                            <div
+                                                                class="timeline-label">@RepairOrderHelper.StatusLabel(hist.NewStatus)</div>
                                                             @if (!string.IsNullOrEmpty(hist.Comment))
                                                             {
                                                                 <div class="timeline-note">@hist.Comment</div>
@@ -176,9 +142,7 @@
         }
         else if (verifyPhone != null)
         {
-
             <div class="verify-box fade-up">
-
                 <div class="verify-icon">
                     <i class="bi bi-phone"></i>
                 </div>
@@ -187,27 +151,24 @@
                     Jeśli numer <strong>@verifyPhone</strong> jest w naszym systemie,
                     wysłaliśmy 6-cyfrowy kod SMS. Kod jest ważny przez <strong>10 minut</strong>.
                 </p>
-
                 @if (!string.IsNullOrEmpty(verifyError))
                 {
                     <div class="portal-alert portal-alert-error mb-3">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i> @verifyError
                     </div>
                 }
-
                 <form asp-action="StatusVerify" method="post">
-                    <input type="hidden" name="phone" value="@verifyPhone" />
+                    <input type="hidden" name="phone" value="@verifyPhone"/>
                     <div class="code-input-wrap">
                         <input type="text" name="code" class="code-input"
                                maxlength="6" placeholder="• • • • • •"
                                autocomplete="one-time-code" inputmode="numeric"
-                               autofocus required />
+                               autofocus required/>
                         <button type="submit" class="btn-verify">
                             <i class="bi bi-unlock"></i> Weryfikuj
                         </button>
                     </div>
                 </form>
-
                 <a asp-action="Status" class="back-link">
                     <i class="bi bi-arrow-left"></i> Wróć i zmień numer
                 </a>
@@ -215,7 +176,6 @@
         }
         else
         {
-
             <div class="phone-box fade-up">
                 <div class="phone-box-icon">
                     <i class="bi bi-shield-lock"></i>
@@ -225,33 +185,28 @@
                     Podaj numer telefonu podany przy oddaniu pojazdu do serwisu.
                     Wyślemy jednorazowy kod SMS — bez zakładania konta.
                 </p>
-
                 @if (!string.IsNullOrEmpty(statusError))
                 {
                     <div class="portal-alert portal-alert-error mb-3">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i> @statusError
                     </div>
                 }
-
                 <form asp-action="StatusRequest" method="post">
                     <div class="phone-input-wrap">
                         <i class="bi bi-telephone phone-icon"></i>
                         <input type="tel" name="phone" class="phone-input"
-                               placeholder="+48 600 100 200"
-                               autocomplete="tel" required />
+                               placeholder="600 100 200"
+                               autocomplete="tel" required/>
                         <button type="submit" class="btn-send-code">
                             Wyślij kod <i class="bi bi-arrow-right"></i>
                         </button>
                     </div>
                 </form>
-
                 <div class="privacy-note">
                     <i class="bi bi-lock-fill"></i>
                     Numer telefonu służy wyłącznie do weryfikacji i nie jest przechowywany w historii wyszukiwania.
                 </div>
             </div>
-
-            <!-- Info cards -->
             <div class="row g-4 mt-4">
                 <div class="col-md-4 fade-up fade-up-delay-1">
                     <div class="info-card">
@@ -277,11 +232,10 @@
                             <i class="bi bi-headset"></i>
                         </div>
                         <h6>Potrzebujesz pomocy?</h6>
-                        <p>@Cms("help")</p>
+                        <p>@cms.Get("help")</p>
                     </div>
                 </div>
             </div>
         }
-
     </div>
 </section>

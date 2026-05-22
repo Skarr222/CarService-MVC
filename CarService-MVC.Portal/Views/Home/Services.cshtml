@@ -1,15 +1,13 @@
 @model List<ServiceCategory>
 @{
     ViewData["Title"] = "Usługi";
-    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
-    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
+    var cms = CmsHelper.FromViewBag(ViewData);
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/home/services.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/services.css" asp-append-version="true"/>
 }
 
-<!-- Page Hero -->
 <section class="page-hero">
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -20,12 +18,10 @@
         </nav>
         <h1 class="fade-up">Nasze <span>usługi</span></h1>
         <p class="fade-up fade-up-delay-1">
-            @Cms("intro.subtitle")
+            @cms.Get("intro.subtitle")
         </p>
     </div>
 </section>
-
-<!-- Services -->
 <section class="services-full-section">
     <div class="container">
         @if (!Model.Any())
@@ -38,9 +34,9 @@
         }
         else
         {
-            @foreach (var (category, idx) in Model.Select((c, i) => (c, i)))
+            @foreach (var (category, idx) in Model.Select((category, index) => (category, index)))
             {
-                <div class="category-block fade-up" style="animation-delay: @(idx * 0.1)s">
+                <div class="category-block fade-up" style="@AnimationHelper.AnimDelay(idx)">
                     <div class="category-header">
                         <div class="category-icon-wrap">
                             <i class="bi @(string.IsNullOrEmpty(category.IconCss) ? "bi-gear" : category.IconCss)"></i>

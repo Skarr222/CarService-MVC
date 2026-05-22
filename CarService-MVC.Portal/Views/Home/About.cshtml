@@ -1,15 +1,13 @@
 @model List<Employee>
 @{
     ViewData["Title"] = "O nas";
-    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
-    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
+    var cms = CmsHelper.FromViewBag(ViewData);
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/home/about.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/about.css" asp-append-version="true"/>
 }
 
-<!-- Page Hero -->
 <section class="page-hero">
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -20,12 +18,10 @@
         </nav>
         <h1 class="fade-up">O <span>nas</span></h1>
         <p class="fade-up fade-up-delay-1">
-            @Cms("intro.subtitle")
+            @cms.Get("intro.subtitle")
         </p>
     </div>
 </section>
-
-<!-- Mission Section -->
 <section class="section-mission">
     <div class="container">
         <div class="row align-items-center g-5">
@@ -33,14 +29,14 @@
                 <p class="overline-label"><i class="bi bi-award-fill"></i> Nasza historia</p>
                 <h2 class="section-title">Nasza <span>misja</span></h2>
                 <p class="mission-text mt-4">
-                    @Cms("mission.content")
+                    @cms.Get("mission.content")
                 </p>
                 <p class="mission-text">
-                    @Cms("mission.content2")
+                    @cms.Get("mission.content2")
                 </p>
                 <div class="d-flex gap-3 mt-4">
-                    <a asp-action="Book" class="btn-cta-lg"><i class="bi bi-calendar-check"></i> Umów wizytę</a>
-                    <a asp-action="Contact" class="btn btn-outline-secondary btn-lg px-4">Kontakt</a>
+                    <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg"><i class="bi bi-calendar-check"></i> Umów wizytę</a>
+                    <a asp-controller="Contact" asp-action="Contact" class="btn btn-outline-secondary btn-lg px-4">Kontakt</a>
                 </div>
             </div>
             <div class="col-lg-6 fade-up fade-up-delay-2">
@@ -74,8 +70,6 @@
         </div>
     </div>
 </section>
-
-<!-- Values Section -->
 <section class="section-values">
     <div class="container">
         <div class="text-center mb-5 fade-up">
@@ -88,7 +82,7 @@
                         <i class="bi bi-shield-check"></i>
                     </div>
                     <h5>Jakość</h5>
-                    <p>@Cms("values.quality")</p>
+                    <p>@cms.Get("values.quality")</p>
                 </div>
             </div>
             <div class="col-md-4 fade-up fade-up-delay-2">
@@ -97,7 +91,7 @@
                         <i class="bi bi-hand-thumbs-up"></i>
                     </div>
                     <h5>Uczciwość</h5>
-                    <p>@Cms("values.honesty")</p>
+                    <p>@cms.Get("values.honesty")</p>
                 </div>
             </div>
             <div class="col-md-4 fade-up fade-up-delay-3">
@@ -106,14 +100,12 @@
                         <i class="bi bi-people-fill"></i>
                     </div>
                     <h5>Klient na pierwszym miejscu</h5>
-                    <p>@Cms("values.customer")</p>
+                    <p>@cms.Get("values.customer")</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Team Section -->
 @if (Model.Any())
 {
     <section class="section-team">
@@ -121,23 +113,23 @@
             <div class="text-center mb-5 fade-up">
                 <h2 class="section-title">Nasz <span>zespół</span></h2>
                 <p class="section-subtitle mx-auto mt-3">
-                    @Cms("team.subtitle")
+                    @cms.Get("team.subtitle")
                 </p>
             </div>
             <div class="row g-4 justify-content-center">
-                @foreach (var (emp, idx) in Model.Select((e, i) => (e, i)))
+                @foreach (var (employee, idx) in Model.Select((employee, index) => (employee, index)))
                 {
-                    <div class="col-sm-6 col-lg-3 fade-up" style="animation-delay: @(idx * 0.1)s">
+                    <div class="col-sm-6 col-lg-3 fade-up" style="@AnimationHelper.AnimDelay(idx)">
                         <div class="team-card">
                             <div class="team-avatar">
                                 <i class="bi bi-person-fill"></i>
                             </div>
-                            <h5 class="team-name">@emp.FirstName @emp.LastName</h5>
-                            <p class="team-position">@emp.Position</p>
-                            @if (!string.IsNullOrEmpty(emp.Email))
+                            <h5 class="team-name">@employee.FirstName @employee.LastName</h5>
+                            <p class="team-position">@employee.Position</p>
+                            @if (!string.IsNullOrEmpty(employee.Email))
                             {
-                                <a href="mailto:@emp.Email" class="team-email">
-                                    <i class="bi bi-envelope"></i> @emp.Email
+                                <a href="mailto:@employee.Email" class="team-email">
+                                    <i class="bi bi-envelope"></i> @employee.Email
                                 </a>
                             }
                         </div>

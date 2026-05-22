@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Strona główna";
-    var cms = (Dictionary<string, string>)(ViewBag.Cms ?? new Dictionary<string, string>());
-    string Cms(string key, string fallback = "") => cms.TryGetValue(key, out var v) ? v : fallback;
+    var cms = CmsHelper.FromViewBag(ViewData);
 }
 
 @section Styles {
@@ -21,10 +20,10 @@
                     w <span>dobrych rękach</span>
                 </h1>
                 <p class="lead mt-4">
-                    @Cms("hero.lead")
+                    @cms.Get("hero.lead")
                 </p>
                 <div class="d-flex gap-3 mt-4">
-                    <a asp-controller="Home" asp-action="Book" class="btn-cta-lg">
+                    <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg">
                         <i class="bi bi-calendar-check"></i> Umów wizytę
                     </a>
                     <a asp-controller="Home" asp-action="Services" class="btn-outline-light-custom">
@@ -54,7 +53,7 @@
                         </div>
                         <h5 class="fw-bold">Gwarancja na naprawy</h5>
                         <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">
-                            @Cms("hero.guarantee.desc")
+                            @cms.Get("hero.guarantee.desc")
                         </p>
                     </div>
                     <div class="hero-card">
@@ -63,7 +62,7 @@
                         </div>
                         <h5 class="fw-bold">Szybka realizacja</h5>
                         <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">
-                            @Cms("hero.fast.desc")
+                            @cms.Get("hero.fast.desc")
                         </p>
                     </div>
                 </div>
@@ -71,14 +70,12 @@
         </div>
     </div>
 </section>
-
-
 <section class="section-why">
     <div class="container">
         <div class="text-center mb-5 fade-up">
             <h2 class="section-title">Dlaczego <span>my</span>?</h2>
             <p class="section-subtitle mx-auto mt-3">
-                @Cms("why.subtitle")
+                @cms.Get("why.subtitle")
             </p>
         </div>
         <div class="row g-4">
@@ -88,7 +85,7 @@
                         <i class="bi bi-award"></i>
                     </div>
                     <h5>Doświadczenie</h5>
-                    <p>@Cms("why.experience")</p>
+                    <p>@cms.Get("why.experience")</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 fade-up fade-up-delay-2">
@@ -97,7 +94,7 @@
                         <i class="bi bi-shield-check"></i>
                     </div>
                     <h5>Gwarancja 12 mies.</h5>
-                    <p>@Cms("why.guarantee")</p>
+                    <p>@cms.Get("why.guarantee")</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 fade-up fade-up-delay-3">
@@ -106,7 +103,7 @@
                         <i class="bi bi-cash-stack"></i>
                     </div>
                     <h5>Uczciwe ceny</h5>
-                    <p>@Cms("why.prices")</p>
+                    <p>@cms.Get("why.prices")</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 fade-up fade-up-delay-4">
@@ -115,20 +112,18 @@
                         <i class="bi bi-speedometer2"></i>
                     </div>
                     <h5>Szybka realizacja</h5>
-                    <p>@Cms("why.speed")</p>
+                    <p>@cms.Get("why.speed")</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-
 <section class="section-services">
     <div class="container">
         <div class="text-center mb-5 fade-up">
             <h2 class="section-title">Nasze <span>usługi</span></h2>
             <p class="section-subtitle mx-auto mt-3">
-                @Cms("services.subtitle")
+                @cms.Get("services.subtitle")
             </p>
         </div>
         <div class="row g-4">
@@ -194,36 +189,32 @@
         </div>
     </div>
 </section>
-
-
 <section class="section-cta">
     <div class="container position-relative" style="z-index:1;">
         <div class="row align-items-center">
             <div class="col-lg-7 fade-up">
                 <h2>Potrzebujesz naprawy?<br/>Umów się <span style="color: var(--accent);">już dziś</span></h2>
                 <p class="mt-3">
-                    @Cms("cta.text")
+                    @cms.Get("cta.text")
                 </p>
             </div>
             <div class="col-lg-5 text-lg-end mt-4 mt-lg-0 fade-up fade-up-delay-2">
-                <a asp-controller="Home" asp-action="Book" class="btn-cta-lg me-3">
+                <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg me-3">
                     <i class="bi bi-calendar-check"></i> Umów wizytę
                 </a>
-                <a asp-controller="Home" asp-action="Contact" class="btn-outline-light-custom">
+                <a asp-controller="Contact" asp-action="Contact" class="btn-outline-light-custom">
                     <i class="bi bi-telephone"></i> Zadzwoń
                 </a>
             </div>
         </div>
     </div>
 </section>
-
-
 <section class="section-testimonials">
     <div class="container">
         <div class="text-center mb-5 fade-up">
             <h2 class="section-title">Co mówią <span>klienci</span></h2>
             <p class="section-subtitle mx-auto mt-3">
-                @Cms("testimonials.subtitle")
+                @cms.Get("testimonials.subtitle")
             </p>
         </div>
         <div class="row g-4">
@@ -274,7 +265,7 @@
             </div>
         </div>
         <div class="text-center mt-5 fade-up">
-            <a asp-controller="Home" asp-action="Testimonials" class="btn btn-outline-primary btn-lg px-4">
+            <a asp-controller="Testimonials" asp-action="Testimonials" class="btn btn-outline-primary btn-lg px-4">
                 Wszystkie opinie <i class="bi bi-arrow-right"></i>
             </a>
         </div>

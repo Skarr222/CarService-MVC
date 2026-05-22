@@ -10,16 +10,17 @@
                     <ul class="list-unstyled small">
                         <li class="mb-1"><a asp-controller="Home" asp-action="Services">Usługi</a></li>
                         <li class="mb-1"><a asp-controller="Home" asp-action="About">O nas</a></li>
-                        <li class="mb-1"><a asp-controller="Home" asp-action="Testimonials">Opinie</a></li>
-                        <li class="mb-1"><a asp-controller="Home" asp-action="Contact">Kontakt</a></li>
+                        <li class="mb-1"><a asp-controller="Testimonials" asp-action="Testimonials">Opinie</a></li>
+                        <li class="mb-1"><a asp-controller="Contact" asp-action="Contact">Kontakt</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <h6>Godziny otwarcia</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-1"><i class="bi bi-clock"></i> Pon–Pt: 8:00–18:00</li>
-                        <li class="mb-1"><i class="bi bi-clock"></i> Sob: 9:00–14:00</li>
-                        <li class="mb-1"><i class="bi bi-clock"></i> Nd: nieczynne</li>
+                        @foreach (var h in BookingHelper.OpeningHours)
+                        {
+                            <li class="mb-1"><i class="bi bi-clock"></i> @h.ShortLabel: @h.Hours</li>
+                        }
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">

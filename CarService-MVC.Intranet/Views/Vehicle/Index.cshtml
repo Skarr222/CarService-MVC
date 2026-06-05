@@ -10,6 +10,14 @@
             <i class="bi bi-plus-lg me-1"></i> Dodaj pojazd
         </a>
     </div>
+    <form method="get" class="d-flex gap-2 px-3 pb-3">
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Szukaj pojazdu..." />
+        <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
+        @if (!string.IsNullOrEmpty((string?)ViewBag.Search))
+        {
+            <a asp-action="Index" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></a>
+        }
+    </form>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>

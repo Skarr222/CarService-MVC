@@ -15,9 +15,21 @@ public class ContactRequestController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var requests = dbAutoSerwisContext.ContactRequests
+        var query = dbAutoSerwisContext.ContactRequests.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(c =>
+                c.Name.Contains(search) ||
+                c.Email.Contains(search) ||
+                (c.Subject != null && c.Subject.Contains(search)) ||
+                (c.Phone != null && c.Phone.Contains(search)));
+        }
+
+        ViewBag.Search = search;
+        var requests = query
             .OrderByDescending(c => c.CreatedAt)
             .ToList();
         return View(requests);

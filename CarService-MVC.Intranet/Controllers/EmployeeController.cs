@@ -15,9 +15,22 @@ public class EmployeeController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var employees = dbAutoSerwisContext.Employees
+        var query = dbAutoSerwisContext.Employees.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(e =>
+                e.FirstName.Contains(search) ||
+                e.LastName.Contains(search) ||
+                (e.Position != null && e.Position.Contains(search)) ||
+                (e.Email != null && e.Email.Contains(search)) ||
+                (e.Phone != null && e.Phone.Contains(search)));
+        }
+
+        ViewBag.Search = search;
+        var employees = query
             .OrderBy(e => e.LastName)
             .ThenBy(e => e.FirstName)
             .ToList();

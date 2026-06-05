@@ -19,12 +19,13 @@ public class ContactController : PortalBaseController
     [HttpPost]
     public IActionResult Contact(ContactRequest model)
     {
+        var msgs = GetCms("messages");
         if (string.IsNullOrWhiteSpace(model.Name) ||
             string.IsNullOrWhiteSpace(model.Email) ||
             string.IsNullOrWhiteSpace(model.Message))
         {
             ViewBag.Cms = GetCms("contact");
-            ViewBag.Error = "Wypełnij wszystkie wymagane pola.";
+            ViewBag.Error = msgs.TryGetValue("validation.required", out var v) ? v : "Wypełnij wszystkie wymagane pola.";
             return View(model);
         }
 
@@ -35,7 +36,7 @@ public class ContactController : PortalBaseController
         model.IsRead = false;
         _db.ContactRequests.Add(model);
         _db.SaveChanges();
-        TempData["Success"] = "Dziękujemy! Twoja wiadomość została wysłana.";
+        TempData["Success"] = msgs.TryGetValue("contact.success", out var s) ? s : "Dziękujemy! Twoja wiadomość została wysłana.";
         return RedirectToAction(nameof(Contact));
     }
 }

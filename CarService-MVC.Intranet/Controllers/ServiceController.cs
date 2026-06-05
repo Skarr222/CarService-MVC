@@ -17,10 +17,22 @@ public class ServiceController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var services = dbAutoSerwisContext.Services
+        var query = dbAutoSerwisContext.Services
             .Include(s => s.ServiceCategory)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(s =>
+                s.Name.Contains(search) ||
+                (s.Description != null && s.Description.Contains(search)) ||
+                s.ServiceCategory.Name.Contains(search));
+        }
+
+        ViewBag.Search = search;
+        var services = query
             .OrderBy(s => s.ServiceCategory.Name)
             .ThenBy(s => s.Name)
             .ToList();

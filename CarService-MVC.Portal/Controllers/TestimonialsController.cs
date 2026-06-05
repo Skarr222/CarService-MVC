@@ -21,9 +21,10 @@ public class TestimonialsController : PortalBaseController
     [HttpPost]
     public IActionResult AddTestimonial(string clientName, string content, int rating)
     {
+        var msgs = GetCms("messages");
         if (string.IsNullOrWhiteSpace(clientName) || string.IsNullOrWhiteSpace(content) || rating < 1 || rating > 5)
         {
-            TempData["TestimonialError"] = "Wypełnij wszystkie pola i wybierz ocenę.";
+            TempData["TestimonialError"] = msgs.TryGetValue("testimonials.validation", out var v) ? v : "Wypełnij wszystkie pola i wybierz ocenę.";
             return RedirectToAction(nameof(Testimonials));
         }
 
@@ -36,7 +37,7 @@ public class TestimonialsController : PortalBaseController
             CreatedAt = DateTime.Now
         });
         _db.SaveChanges();
-        TempData["TestimonialSuccess"] = "Dziękujemy! Twoja opinia zostanie opublikowana po moderacji.";
+        TempData["TestimonialSuccess"] = msgs.TryGetValue("testimonials.success", out var s) ? s : "Dziękujemy! Twoja opinia zostanie opublikowana po moderacji.";
         return RedirectToAction(nameof(Testimonials));
     }
 }

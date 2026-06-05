@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Strona główna";
     var cms = CmsHelper.FromViewBag(ViewData);
 }
@@ -15,33 +15,36 @@
                    style="color: var(--accent); letter-spacing: 2px; font-size: 0.85rem;">
                     <i class="bi bi-wrench-adjustable-circle"></i> Profesjonalny serwis
                 </p>
-                <h1>
-                    Twój samochód<br/>
-                    w <span>dobrych rękach</span>
-                </h1>
+                <h1>@Html.Raw(cms.Get("hero.title"))</h1>
                 <p class="lead mt-4">
                     @cms.Get("hero.lead")
                 </p>
                 <div class="d-flex gap-3 mt-4">
-                    <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg">
-                        <i class="bi bi-calendar-check"></i> Umów wizytę
-                    </a>
-                    <a asp-controller="Home" asp-action="Services" class="btn-outline-light-custom">
-                        Nasze usługi <i class="bi bi-arrow-right"></i>
-                    </a>
+                    @if (!string.IsNullOrEmpty(cms.Get("hero.btn.book")))
+                    {
+                        <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg">
+                            <i class="bi bi-calendar-check"></i> @cms.Get("hero.btn.book")
+                        </a>
+                    }
+                    @if (!string.IsNullOrEmpty(cms.Get("hero.btn.services")))
+                    {
+                        <a asp-controller="Home" asp-action="Services" class="btn-outline-light-custom">
+                            @cms.Get("hero.btn.services") <i class="bi bi-arrow-right"></i>
+                        </a>
+                    }
                 </div>
                 <div class="hero-stats">
                     <div>
                         <div class="stat-number">15+</div>
-                        <div class="stat-label">Lat doświadczenia</div>
+                        <div class="stat-label">@cms.Get("stats.experience")</div>
                     </div>
                     <div>
                         <div class="stat-number">8k+</div>
-                        <div class="stat-label">Naprawionych aut</div>
+                        <div class="stat-label">@cms.Get("stats.cars")</div>
                     </div>
                     <div>
                         <div class="stat-number">4.9</div>
-                        <div class="stat-label">Ocena klientów</div>
+                        <div class="stat-label">@cms.Get("stats.rating")</div>
                     </div>
                 </div>
             </div>
@@ -51,7 +54,7 @@
                         <div class="icon-circle">
                             <i class="bi bi-shield-check"></i>
                         </div>
-                        <h5 class="fw-bold">Gwarancja na naprawy</h5>
+                        <h5 class="fw-bold">@cms.Get("hero.guarantee.title")</h5>
                         <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">
                             @cms.Get("hero.guarantee.desc")
                         </p>
@@ -60,7 +63,7 @@
                         <div class="icon-circle" style="background: var(--accent);">
                             <i class="bi bi-clock-history"></i>
                         </div>
-                        <h5 class="fw-bold">Szybka realizacja</h5>
+                        <h5 class="fw-bold">@cms.Get("hero.fast.title")</h5>
                         <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">
                             @cms.Get("hero.fast.desc")
                         </p>
@@ -73,7 +76,7 @@
 <section class="section-why">
     <div class="container">
         <div class="text-center mb-5 fade-up">
-            <h2 class="section-title">Dlaczego <span>my</span>?</h2>
+            <h2 class="section-title">@Html.Raw(cms.Get("why.title"))</h2>
             <p class="section-subtitle mx-auto mt-3">
                 @cms.Get("why.subtitle")
             </p>
@@ -84,7 +87,7 @@
                     <div class="why-icon" style="background: rgba(37,99,235,0.1); color: var(--primary);">
                         <i class="bi bi-award"></i>
                     </div>
-                    <h5>Doświadczenie</h5>
+                    <h5>@cms.Get("why.experience.title")</h5>
                     <p>@cms.Get("why.experience")</p>
                 </div>
             </div>
@@ -93,7 +96,7 @@
                     <div class="why-icon" style="background: rgba(245,158,11,0.1); color: var(--accent);">
                         <i class="bi bi-shield-check"></i>
                     </div>
-                    <h5>Gwarancja 12 mies.</h5>
+                    <h5>@cms.Get("why.guarantee.title")</h5>
                     <p>@cms.Get("why.guarantee")</p>
                 </div>
             </div>
@@ -102,7 +105,7 @@
                     <div class="why-icon" style="background: rgba(16,185,129,0.1); color: #10b981;">
                         <i class="bi bi-cash-stack"></i>
                     </div>
-                    <h5>Uczciwe ceny</h5>
+                    <h5>@cms.Get("why.prices.title")</h5>
                     <p>@cms.Get("why.prices")</p>
                 </div>
             </div>
@@ -111,7 +114,7 @@
                     <div class="why-icon" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">
                         <i class="bi bi-speedometer2"></i>
                     </div>
-                    <h5>Szybka realizacja</h5>
+                    <h5>@cms.Get("why.speed.title")</h5>
                     <p>@cms.Get("why.speed")</p>
                 </div>
             </div>
@@ -121,7 +124,7 @@
 <section class="section-services">
     <div class="container">
         <div class="text-center mb-5 fade-up">
-            <h2 class="section-title">Nasze <span>usługi</span></h2>
+            <h2 class="section-title">@Html.Raw(cms.Get("services.title"))</h2>
             <p class="section-subtitle mx-auto mt-3">
                 @cms.Get("services.subtitle")
             </p>
@@ -193,15 +196,18 @@
     <div class="container position-relative" style="z-index:1;">
         <div class="row align-items-center">
             <div class="col-lg-7 fade-up">
-                <h2>Potrzebujesz naprawy?<br/>Umów się <span style="color: var(--accent);">już dziś</span></h2>
+                <h2>@Html.Raw(cms.Get("cta.title"))</h2>
                 <p class="mt-3">
                     @cms.Get("cta.text")
                 </p>
             </div>
             <div class="col-lg-5 text-lg-end mt-4 mt-lg-0 fade-up fade-up-delay-2">
-                <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg me-3">
-                    <i class="bi bi-calendar-check"></i> Umów wizytę
-                </a>
+                @if (!string.IsNullOrEmpty(cms.Get("hero.btn.book")))
+                {
+                    <a asp-controller="Booking" asp-action="Book" class="btn-cta-lg me-3">
+                        <i class="bi bi-calendar-check"></i> @cms.Get("hero.btn.book")
+                    </a>
+                }
                 <a asp-controller="Contact" asp-action="Contact" class="btn-outline-light-custom">
                     <i class="bi bi-telephone"></i> Zadzwoń
                 </a>
@@ -212,7 +218,7 @@
 <section class="section-testimonials">
     <div class="container">
         <div class="text-center mb-5 fade-up">
-            <h2 class="section-title">Co mówią <span>klienci</span></h2>
+            <h2 class="section-title">@Html.Raw(cms.Get("testimonials.title"))</h2>
             <p class="section-subtitle mx-auto mt-3">
                 @cms.Get("testimonials.subtitle")
             </p>

@@ -15,9 +15,19 @@ public class TestimonialController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var testimonials = dbAutoSerwisContext.Testimonials
+        var query = dbAutoSerwisContext.Testimonials.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(t =>
+                t.ClientName.Contains(search) ||
+                t.Content.Contains(search));
+        }
+
+        ViewBag.Search = search;
+        var testimonials = query
             .OrderByDescending(t => t.CreatedAt)
             .ToList();
         return View(testimonials);

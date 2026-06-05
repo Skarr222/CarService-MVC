@@ -23,11 +23,12 @@ public class BookingController : PortalBaseController
         string? serviceCategory, string? carMake, string? carModel,
         string? licensePlate, string? message)
     {
+        var msgs = GetCms("messages");
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
         {
             ViewBag.Cms = GetCms("book");
             ViewBag.ServiceCategories = _db.ServiceCategories.OrderBy(c => c.Name).ToList();
-            ViewBag.Error = "Wypełnij wszystkie wymagane pola.";
+            ViewBag.Error = msgs.TryGetValue("validation.required", out var v) ? v : "Wypełnij wszystkie wymagane pola.";
             return View();
         }
 
@@ -60,7 +61,7 @@ public class BookingController : PortalBaseController
             IsRead = false
         });
         _db.SaveChanges();
-        TempData["Success"] = "Rezerwacja przyjęta! Skontaktujemy się wkrótce, aby potwierdzić termin.";
+        TempData["Success"] = msgs.TryGetValue("booking.success", out var s) ? s : "Rezerwacja przyjęta! Skontaktujemy się wkrótce, aby potwierdzić termin.";
         return RedirectToAction(nameof(Book));
     }
 }

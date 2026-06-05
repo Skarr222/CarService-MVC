@@ -15,9 +15,19 @@ public class CmsContentController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var contents = dbAutoSerwisContext.CmsContents
+        var query = dbAutoSerwisContext.CmsContents.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(c =>
+                c.Key.Contains(search) ||
+                (c.Title != null && c.Title.Contains(search)) ||
+                c.Content.Contains(search) ||
+                c.Section.Contains(search));
+
+        ViewBag.Search = search;
+        var contents = query
             .OrderBy(c => c.Section)
             .ThenBy(c => c.SortOrder)
             .ToList();
@@ -77,6 +87,7 @@ public class CmsContentController : Controller
             dbAutoSerwisContext.CmsContents.Remove(content);
             dbAutoSerwisContext.SaveChanges();
         }
+
         return RedirectToAction("Index");
     }
 }

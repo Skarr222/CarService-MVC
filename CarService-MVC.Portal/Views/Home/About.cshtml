@@ -26,8 +26,8 @@
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6 fade-up">
-                <p class="overline-label"><i class="bi bi-award-fill"></i> Nasza historia</p>
-                <h2 class="section-title">Nasza <span>misja</span></h2>
+                <p class="overline-label"><i class="bi bi-award-fill"></i> @cms.Get("history.title")</p>
+                <h2 class="section-title">@Html.Raw(cms.Get("mission.title"))</h2>
                 <p class="mission-text mt-4">
                     @cms.Get("mission.content")
                 </p>
@@ -44,25 +44,25 @@
                     <div class="col-6">
                         <div class="stat-box">
                             <div class="stat-number-lg">15+</div>
-                            <div class="stat-label-sm">Lat doświadczenia</div>
+                            <div class="stat-label-sm">@cms.Get("stats.experience")</div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="stat-box stat-box-accent">
                             <div class="stat-number-lg">8k+</div>
-                            <div class="stat-label-sm">Naprawionych aut</div>
+                            <div class="stat-label-sm">@cms.Get("stats.cars")</div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="stat-box stat-box-accent">
-                            <div class="stat-number-lg">4.9★</div>
-                            <div class="stat-label-sm">Ocena klientów</div>
+                            <div class="stat-number-lg">4.9\u2605</div>
+                            <div class="stat-label-sm">@cms.Get("stats.rating")</div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="stat-box">
                             <div class="stat-number-lg">12m</div>
-                            <div class="stat-label-sm">Gwarancja na naprawy</div>
+                            <div class="stat-label-sm">@cms.Get("stats.warranty")</div>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
 <section class="section-values">
     <div class="container">
         <div class="text-center mb-5 fade-up">
-            <h2 class="section-title">Nasze <span>wartości</span></h2>
+            <h2 class="section-title">@Html.Raw(cms.Get("values.title"))</h2>
         </div>
         <div class="row g-4">
             <div class="col-md-4 fade-up fade-up-delay-1">

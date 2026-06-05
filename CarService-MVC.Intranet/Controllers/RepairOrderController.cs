@@ -17,12 +17,27 @@ public class RepairOrderController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var orders = dbAutoSerwisContext.RepairOrders
+        var query = dbAutoSerwisContext.RepairOrders
             .Include(r => r.Client)
             .Include(r => r.Vehicle)
             .Include(r => r.Employee)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(r =>
+                r.Client.FirstName.Contains(search) ||
+                r.Client.LastName.Contains(search) ||
+                r.Vehicle.Brand.Contains(search) ||
+                r.Vehicle.Model.Contains(search) ||
+                (r.Vehicle.LicensePlate != null && r.Vehicle.LicensePlate.Contains(search)) ||
+                (r.Description != null && r.Description.Contains(search)));
+        }
+
+        ViewBag.Search = search;
+        var orders = query
             .OrderByDescending(r => r.CreatedAt)
             .ToList();
         return View(orders);

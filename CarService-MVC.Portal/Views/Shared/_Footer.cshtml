@@ -1,39 +1,41 @@
+@{
+    var ft = CmsHelper.FooterCms(ViewData);
+}
 <footer class="footer-custom mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h6><i class="bi bi-wrench-adjustable-circle"></i> AutoSerwis Pro</h6>
-                    <p class="small">Profesjonalny serwis samochodowy z wieloletnim doświadczeniem. Naprawiamy wszystkie marki.</p>
+                    <h6><i class="bi bi-wrench-adjustable-circle"></i> @ft.Get("footer.company")</h6>
+                    <p class="small">@ft.Get("footer.description")</p>
                 </div>
                 <div class="col-lg-2 mb-4">
                     <h6>Menu</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-1"><a asp-controller="Home" asp-action="Services">Usługi</a></li>
-                        <li class="mb-1"><a asp-controller="Home" asp-action="About">O nas</a></li>
-                        <li class="mb-1"><a asp-controller="Testimonials" asp-action="Testimonials">Opinie</a></li>
-                        <li class="mb-1"><a asp-controller="Contact" asp-action="Contact">Kontakt</a></li>
+                        <li class="mb-1"><a asp-controller="Home" asp-action="Services">@(CmsHelper.NavbarCms(ViewData).Get("nav.services"))</a></li>
+                        <li class="mb-1"><a asp-controller="Home" asp-action="About">@(CmsHelper.NavbarCms(ViewData).Get("nav.about"))</a></li>
+                        <li class="mb-1"><a asp-controller="Testimonials" asp-action="Testimonials">@(CmsHelper.NavbarCms(ViewData).Get("nav.testimonials"))</a></li>
+                        <li class="mb-1"><a asp-controller="Contact" asp-action="Contact">@(CmsHelper.NavbarCms(ViewData).Get("nav.contact"))</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <h6>Godziny otwarcia</h6>
                     <ul class="list-unstyled small">
-                        @foreach (var h in BookingHelper.OpeningHours)
-                        {
-                            <li class="mb-1"><i class="bi bi-clock"></i> @h.ShortLabel: @h.Hours</li>
-                        }
+                        <li class="mb-1"><i class="bi bi-clock"></i> @ft.Get("footer.hours.weekday")</li>
+                        <li class="mb-1"><i class="bi bi-clock"></i> @ft.Get("footer.hours.saturday")</li>
+                        <li class="mb-1"><i class="bi bi-clock"></i> @ft.Get("footer.hours.sunday")</li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <h6>Kontakt</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-1"><i class="bi bi-geo-alt"></i> ul. Mechaników 15, Warszawa</li>
-                        <li class="mb-1"><i class="bi bi-telephone"></i> +48 22 123 45 67</li>
-                        <li class="mb-1"><i class="bi bi-envelope"></i> kontakt@autoserwis.pl</li>
+                        <li class="mb-1"><i class="bi bi-geo-alt"></i> @ft.Get("footer.address")</li>
+                        <li class="mb-1"><i class="bi bi-telephone"></i> @ft.Get("footer.phone")</li>
+                        <li class="mb-1"><i class="bi bi-envelope"></i> @ft.Get("footer.email")</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom text-center">
-                <small>&copy; 2026 AutoSerwis Pro. Wszelkie prawa zastrzeżone.</small>
+                <small>@ft.Get("footer.copyright")</small>
             </div>
         </div>
     </footer>

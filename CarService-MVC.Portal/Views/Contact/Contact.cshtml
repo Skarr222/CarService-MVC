@@ -28,7 +28,7 @@
         <div class="row g-5">
             <div class="col-lg-4 fade-up">
                 <div class="contact-info-block">
-                    <h4 class="contact-info-title">Dane kontaktowe</h4>
+                    <h4 class="contact-info-title">@cms.Get("info.title")</h4>
                     <div class="contact-info-item">
                         <div class="contact-info-icon" style="background:rgba(37,99,235,0.1);color:var(--primary)">
                             <i class="bi bi-geo-alt-fill"></i>
@@ -74,7 +74,7 @@
             <div class="col-lg-8 fade-up fade-up-delay-2">
                 <div class="contact-form-card">
                     <h4 class="form-card-title">Wyślij wiadomość</h4>
-                    <p class="form-card-subtitle">Odpowiemy w ciągu 24 godzin roboczych.</p>
+                    <p class="form-card-subtitle">@cms.Get("info.response")</p>
                     @if (TempData["Success"] != null)
                     {
                         <div class="portal-alert portal-alert-success">

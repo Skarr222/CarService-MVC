@@ -16,10 +16,21 @@ public class ServiceCategoryController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var categories = dbAutoSerwisContext.ServiceCategories
+        var query = dbAutoSerwisContext.ServiceCategories
             .Include(c => c.Services)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(c =>
+                c.Name.Contains(search) ||
+                (c.Description != null && c.Description.Contains(search)));
+        }
+
+        ViewBag.Search = search;
+        var categories = query
             .OrderBy(c => c.Name)
             .ToList();
         return View(categories);

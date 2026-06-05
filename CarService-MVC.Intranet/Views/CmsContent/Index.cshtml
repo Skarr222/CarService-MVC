@@ -10,6 +10,14 @@
             <i class="bi bi-plus-lg me-1"></i> Dodaj treść
         </a>
     </div>
+    <form method="get" class="d-flex gap-2 px-3 pb-3">
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Szukaj treści..." />
+        <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
+        @if (!string.IsNullOrEmpty((string?)ViewBag.Search))
+        {
+            <a asp-action="Index" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></a>
+        }
+    </form>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -18,7 +26,6 @@
                 <th>Klucz</th>
                 <th>Tytuł</th>
                 <th>Sekcja</th>
-                <th>Kolejność</th>
                 <th>Aktywny</th>
                 <th>Zaktualizowano</th>
                 <th>Akcje</th>
@@ -28,7 +35,7 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="8" class="text-center text-muted py-4">Brak danych</td>
+                    <td colspan="7" class="text-center text-muted py-4">Brak danych</td>
                 </tr>
             }
             @foreach (var content in Model)
@@ -38,7 +45,6 @@
                     <td><code>@content.Key</code></td>
                     <td>@content.Title</td>
                     <td>@content.Section</td>
-                    <td>@content.SortOrder</td>
                     <td>
                         @if (content.IsActive)
                         {

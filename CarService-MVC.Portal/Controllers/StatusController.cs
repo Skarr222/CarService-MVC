@@ -39,7 +39,8 @@ public class StatusController : PortalBaseController
 
         if (recentCodeCount >= 3)
         {
-            TempData["StatusError"] = "Przekroczono limit prób. Spróbuj ponownie za godzinę.";
+            var msgs = GetCms("messages");
+            TempData["StatusError"] = msgs.TryGetValue("status.ratelimit", out var v) ? v : "Przekroczono limit prób. Spróbuj ponownie za godzinę.";
             return RedirectToAction(nameof(Status));
         }
 

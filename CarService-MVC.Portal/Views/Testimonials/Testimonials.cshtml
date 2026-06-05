@@ -19,7 +19,7 @@
                 <li class="breadcrumb-item active">Opinie</li>
             </ol>
         </nav>
-        <h1 class="fade-up">Co mówią <span>klienci</span></h1>
+        <h1 class="fade-up">@Html.Raw(cms.Get("title"))</h1>
         <p class="fade-up fade-up-delay-1">
             @cms.Get("intro.subtitle")
         </p>
@@ -50,7 +50,7 @@
                                 }
                             }
                         </div>
-                        <div class="rating-label">Średnia ocena</div>
+                        <div class="rating-label">@cms.Get("stats.avg")</div>
                     </div>
                 </div>
                 <div class="col-auto d-flex align-items-center">
@@ -59,7 +59,7 @@
                 <div class="col-auto d-flex align-items-center">
                     <div class="text-center">
                         <div class="stat-big-number">@totalCount</div>
-                        <div class="stat-big-label">Opinii klientów</div>
+                        <div class="stat-big-label">@cms.Get("stats.count")</div>
                     </div>
                 </div>
                 <div class="col-auto d-flex align-items-center">
@@ -68,7 +68,7 @@
                 <div class="col-auto d-flex align-items-center">
                     <div class="text-center">
                         <div class="stat-big-number">@Model.Count(t => t.Rating == 5)</div>
-                        <div class="stat-big-label">Ocen 5 gwiazdek</div>
+                        <div class="stat-big-label">@cms.Get("stats.five")</div>
                     </div>
                 </div>
             </div>
@@ -81,8 +81,8 @@
         {
             <div class="empty-state">
                 <i class="bi bi-star"></i>
-                <h5>Brak opinii do wyświetlenia</h5>
-                <p>Wróć wkrótce — opinie są aktualnie moderowane.</p>
+                <h5>@cms.Get("empty.title")</h5>
+                <p>@cms.Get("empty.text")</p>
             </div>
         }
         else
@@ -124,8 +124,8 @@
                     <div class="add-testimonial-header">
                         <i class="bi bi-star"></i>
                         <div>
-                            <h4>Podziel się opinią</h4>
-                            <p>Twoja opinia pojawi się po weryfikacji przez nasz zespół.</p>
+                            <h4>@cms.Get("form.title")</h4>
+                            <p>@cms.Get("form.note")</p>
                         </div>
                     </div>
                     @if (TempData["TestimonialSuccess"] != null)

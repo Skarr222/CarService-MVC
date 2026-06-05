@@ -17,10 +17,24 @@ public class VehicleController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var vehicles = dbAutoSerwisContext.Vehicles
+        var query = dbAutoSerwisContext.Vehicles
             .Include(v => v.Client)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(v =>
+                v.Brand.Contains(search) ||
+                v.Model.Contains(search) ||
+                (v.LicensePlate != null && v.LicensePlate.Contains(search)) ||
+                (v.Vin != null && v.Vin.Contains(search)) ||
+                v.Client.LastName.Contains(search));
+        }
+
+        ViewBag.Search = search;
+        var vehicles = query
             .OrderBy(v => v.Brand)
             .ThenBy(v => v.Model)
             .ToList();

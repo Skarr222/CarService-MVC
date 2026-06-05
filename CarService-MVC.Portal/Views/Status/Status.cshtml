@@ -21,7 +21,7 @@
                 <li class="breadcrumb-item active">Status naprawy</li>
             </ol>
         </nav>
-        <h1 class="fade-up">Sprawdź <span>status</span> naprawy</h1>
+        <h1 class="fade-up">@Html.Raw(cms.Get("title"))</h1>
         <p class="fade-up fade-up-delay-1">
             @cms.Get("intro.subtitle")
         </p>
@@ -33,13 +33,13 @@
         {
             <div class="verify-success-bar fade-up">
                 <i class="bi bi-check-circle-fill"></i>
-                Tożsamość potwierdzona — wyświetlamy Twoje zlecenia.
+                @cms.Get("verified")
             </div>
             @if (!Model.Any())
             {
                 <div class="no-results">
                     <i class="bi bi-inbox"></i>
-                    <h5>Brak aktywnych zleceń</h5>
+                    <h5>@cms.Get("empty")</h5>
                     <p>Nie znaleźliśmy żadnych zleceń powiązanych z Twoim numerem.</p>
                 </div>
             }
@@ -148,8 +148,7 @@
                 </div>
                 <h4>Sprawdź swój telefon</h4>
                 <p>
-                    Jeśli numer <strong>@verifyPhone</strong> jest w naszym systemie,
-                    wysłaliśmy 6-cyfrowy kod SMS. Kod jest ważny przez <strong>10 minut</strong>.
+                    @cms.Get("code.desc")
                 </p>
                 @if (!string.IsNullOrEmpty(verifyError))
                 {
@@ -180,10 +179,10 @@
                 <div class="phone-box-icon">
                     <i class="bi bi-shield-lock"></i>
                 </div>
-                <h4>Weryfikacja tożsamości</h4>
+                <h4>@cms.Get("verify.title")</h4>
                 <p>
-                    Podaj numer telefonu podany przy oddaniu pojazdu do serwisu.
-                    Wyślemy jednorazowy kod SMS — bez zakładania konta.
+                    @cms.Get("verify.desc")
+                    @cms.Get("verify.sms")
                 </p>
                 @if (!string.IsNullOrEmpty(statusError))
                 {
@@ -204,7 +203,7 @@
                 </form>
                 <div class="privacy-note">
                     <i class="bi bi-lock-fill"></i>
-                    Numer telefonu służy wyłącznie do weryfikacji i nie jest przechowywany w historii wyszukiwania.
+                    @cms.Get("privacy")
                 </div>
             </div>
             <div class="row g-4 mt-4">
@@ -213,7 +212,7 @@
                         <div class="info-icon" style="background:rgba(37,99,235,0.1);color:var(--primary)">
                             <i class="bi bi-shield-check"></i>
                         </div>
-                        <h6>Bezpieczne</h6>
+                        <h6>@cms.Get("verify.secure")</h6>
                         <p>Dane zlecenia widoczne tylko po potwierdzeniu tożsamości kodem SMS.</p>
                     </div>
                 </div>
@@ -222,7 +221,7 @@
                         <div class="info-icon" style="background:rgba(245,158,11,0.1);color:var(--accent)">
                             <i class="bi bi-person-x"></i>
                         </div>
-                        <h6>Bez rejestracji</h6>
+                        <h6>@cms.Get("verify.noreg")</h6>
                         <p>Nie musisz zakładać konta ani pamiętać hasła. Weryfikacja jednorazowym kodem.</p>
                     </div>
                 </div>
@@ -231,7 +230,7 @@
                         <div class="info-icon" style="background:rgba(16,185,129,0.1);color:#10b981">
                             <i class="bi bi-headset"></i>
                         </div>
-                        <h6>Potrzebujesz pomocy?</h6>
+                        <h6>@cms.Get("verify.helplink")</h6>
                         <p>@cms.Get("help")</p>
                     </div>
                 </div>

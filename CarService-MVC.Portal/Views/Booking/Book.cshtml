@@ -31,8 +31,8 @@
                     <div class="book-form-header">
                         <i class="bi bi-calendar-check"></i>
                         <div>
-                            <h4>Formularz rezerwacji</h4>
-                            <p>Zadzwonimy, żeby potwierdzić termin.</p>
+                            <h4>@cms.Get("form.title")</h4>
+                            <p>@cms.Get("form.confirm")</p>
                         </div>
                     </div>
                     @if (TempData["Success"] != null)
@@ -51,7 +51,7 @@
                         <div class="row g-3">
                             <div class="col-12">
                                 <div class="form-section-label">
-                                    <i class="bi bi-person"></i> Dane kontaktowe
+                                    <i class="bi bi-person"></i> @cms.Get("tab.contact")
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="form-section-label">
-                                    <i class="bi bi-car-front"></i> Dane pojazdu
+                                    <i class="bi bi-car-front"></i> @cms.Get("tab.vehicle")
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="form-section-label">
-                                    <i class="bi bi-wrench"></i> Usługa i termin
+                                    <i class="bi bi-wrench"></i> @cms.Get("tab.service")
                                 </div>
                             </div>
                             <div class="col-12">
@@ -134,21 +134,21 @@
             <div class="col-lg-4 fade-up fade-up-delay-2">
                 <div class="book-info-card mb-3">
                     <i class="bi bi-clock book-info-icon"></i>
-                    <h6>Czas odpowiedzi</h6>
+                    <h6>@cms.Get("info.response.title")</h6>
                     <p>@cms.Get("info.response")</p>
                 </div>
                 <div class="book-info-card mb-3">
                     <i class="bi bi-car-front book-info-icon"></i>
-                    <h6>Bezpłatna diagnoza</h6>
+                    <h6>@cms.Get("info.diagnosis.title")</h6>
                     <p>@cms.Get("info.diagnosis")</p>
                 </div>
                 <div class="book-info-card mb-3">
                     <i class="bi bi-shield-check book-info-icon"></i>
-                    <h6>Gwarancja na naprawy</h6>
+                    <h6>@cms.Get("info.guarantee.title")</h6>
                     <p>@cms.Get("info.guarantee")</p>
                 </div>
                 <div class="book-hours-card">
-                    <h6><i class="bi bi-calendar3"></i> Godziny otwarcia</h6>
+                    <h6><i class="bi bi-calendar3"></i> @cms.Get("hours.title")</h6>
                     <ul class="hours-list">
                         @foreach (var hours in BookingHelper.OpeningHours)
                         {

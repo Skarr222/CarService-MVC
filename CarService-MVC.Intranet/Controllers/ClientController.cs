@@ -16,10 +16,23 @@ public class ClientController : Controller
         this.dbAutoSerwisContext = dbAutoSerwisContext;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? search)
     {
-        var clients = dbAutoSerwisContext.Clients
+        var query = dbAutoSerwisContext.Clients
             .Include(c => c.Vehicles)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(c =>
+                c.FirstName.Contains(search) ||
+                c.LastName.Contains(search) ||
+                (c.Email != null && c.Email.Contains(search)) ||
+                (c.Phone != null && c.Phone.Contains(search)));
+        }
+
+        ViewBag.Search = search;
+        var clients = query
             .OrderBy(c => c.LastName)
             .ThenBy(c => c.FirstName)
             .ToList();

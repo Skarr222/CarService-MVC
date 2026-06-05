@@ -1,3 +1,6 @@
+@{
+    var nav = CmsHelper.NavbarCms(ViewData);
+}
 <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
     <div class="container">
         <a class="navbar-brand" asp-controller="Home" asp-action="Index">
@@ -22,37 +25,37 @@
                 <ul class="navbar-nav ms-auto me-3 align-items-lg-center">
                     <li class="nav-item">
                         <a class="nav-link @(action == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house-door"></i> Strona główna
+                            <i class="bi bi-house-door"></i> @nav.Get("nav.home")
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(action == "Services" ? "active" : "")" asp-controller="Home" asp-action="Services">
-                            <i class="bi bi-gear"></i> Usługi
+                            <i class="bi bi-gear"></i> @nav.Get("nav.services")
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(action == "About" ? "active" : "")" asp-controller="Home" asp-action="About">
-                            <i class="bi bi-people"></i> O nas
+                            <i class="bi bi-people"></i> @nav.Get("nav.about")
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(action == "Status" ? "active" : "")" asp-controller="Status" asp-action="Status">
-                            <i class="bi bi-search"></i> Sprawdź status
+                            <i class="bi bi-search"></i> @nav.Get("nav.status")
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(action == "Testimonials" ? "active" : "")" asp-controller="Testimonials" asp-action="Testimonials">
-                            <i class="bi bi-star"></i> Opinie
+                            <i class="bi bi-star"></i> @nav.Get("nav.testimonials")
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(action == "Contact" ? "active" : "")" asp-controller="Contact" asp-action="Contact">
-                            <i class="bi bi-envelope"></i> Kontakt
+                            <i class="bi bi-envelope"></i> @nav.Get("nav.contact")
                         </a>
                     </li>
                 </ul>
                 <a class="btn btn-cta" asp-controller="Booking" asp-action="Book">
-                    <i class="bi bi-calendar-check"></i> Umów wizytę
+                    <i class="bi bi-calendar-check"></i> @nav.Get("nav.book")
                 </a>
             </div>
         </div>

@@ -1,0 +1,54 @@
+@model List<RepairPhoto>
+@{
+    ViewData["Title"] = "Zdjęcia naprawy";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Zdjęcia — zlecenie #@ViewBag.OrderId (@ViewBag.ClientName)</h3>
+    <a asp-action="Index" class="btn btn-secondary">Powrót</a>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="UploadPhoto" method="post" enctype="multipart/form-data" class="row g-2 align-items-end">
+            <input type="hidden" name="repairOrderId" value="@ViewBag.OrderId"/>
+            <div class="col-auto">
+                <label class="form-label">Plik</label>
+                <input type="file" name="file" accept="image/*" class="form-control" required/>
+            </div>
+            <div class="col">
+                <label class="form-label">Opis (opcjonalnie)</label>
+                <input type="text" name="description" class="form-control" placeholder="np. Uszkodzony zderzak"/>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary-custom">Dodaj zdjęcie</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Brak zdjęć dla tego zlecenia.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var photo in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <img src="@photo.FilePath" class="card-img-top" style="height:180px;object-fit:cover"
+                         alt="Zdjęcie naprawy"/>
+                    <div class="card-body">
+                        <p class="card-text small">@(string.IsNullOrEmpty(photo.Description) ? "Bez opisu" : photo.Description)</p>
+                        <p class="text-muted small mb-2">@photo.UploadedAt.ToString("yyyy-MM-dd HH:mm")</p>
+                        <form asp-action="DeletePhoto" method="post" onsubmit="return confirm('Usunąć zdjęcie?')">
+                            <input type="hidden" name="id" value="@photo.Id"/>
+                            <input type="hidden" name="repairOrderId" value="@ViewBag.OrderId"/>
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Usuń</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

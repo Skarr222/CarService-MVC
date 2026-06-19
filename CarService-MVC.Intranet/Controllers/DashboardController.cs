@@ -40,10 +40,13 @@ public class DashboardController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [Route("Dashboard/Error/{statusCode?}")]
+    public IActionResult Error(int? statusCode)
     {
         var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-        _logger.LogError("Wystąpił błąd. RequestId: {RequestId}", requestId);
+        _logger.LogError("Wystąpił błąd. RequestId: {RequestId}, StatusCode: {StatusCode}", requestId, statusCode);
+
+        ViewBag.StatusCode = statusCode;
         return View(new ErrorViewModel { RequestId = requestId });
     }
 }

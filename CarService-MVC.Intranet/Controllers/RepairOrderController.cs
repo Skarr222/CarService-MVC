@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using CarService_MVC.Data.Data;
 using CarService_MVC.Data.Models;
 using CarService_MVC.Intranet.Helpers;
@@ -26,7 +28,6 @@ public class RepairOrderController : Controller
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
-        {
             query = query.Where(r =>
                 r.Client.FirstName.Contains(search) ||
                 r.Client.LastName.Contains(search) ||
@@ -34,7 +35,6 @@ public class RepairOrderController : Controller
                 r.Vehicle.Model.Contains(search) ||
                 (r.Vehicle.LicensePlate != null && r.Vehicle.LicensePlate.Contains(search)) ||
                 (r.Description != null && r.Description.Contains(search)));
-        }
 
         ViewBag.Search = search;
         var orders = query
@@ -45,11 +45,11 @@ public class RepairOrderController : Controller
 
     public IActionResult Create()
     {
-        ViewBag.Clients        = RepairOrderDropdowns.Clients(dbAutoSerwisContext);
+        ViewBag.Clients = RepairOrderDropdowns.Clients(dbAutoSerwisContext);
         ViewBag.VehicleOptions = RepairOrderDropdowns.VehicleOptions(dbAutoSerwisContext);
-        ViewBag.Employees      = RepairOrderDropdowns.Employees(dbAutoSerwisContext);
-        ViewBag.Statuses       = RepairOrderDropdowns.Statuses();
-        ViewBag.Services       = RepairOrderDropdowns.Services(dbAutoSerwisContext);
+        ViewBag.Employees = RepairOrderDropdowns.Employees(dbAutoSerwisContext);
+        ViewBag.Statuses = RepairOrderDropdowns.Statuses();
+        ViewBag.Services = RepairOrderDropdowns.Services(dbAutoSerwisContext);
         return View();
     }
 
@@ -68,7 +68,7 @@ public class RepairOrderController : Controller
             {
                 RepairOrderId = model.Id,
                 ServiceId = serviceId,
-                Quantity  = FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]),
+                Quantity = FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]),
                 UnitPrice = FormParser.UnitPrice(Request.Form[$"ServicePrice_{serviceId}"])
             });
 
@@ -99,6 +99,18 @@ public class RepairOrderController : Controller
             .Include(r => r.RepairOrderServices)
             .FirstOrDefault(r => r.Id == model.Id);
         if (order == null) return NotFound();
+
+        if (order.Status != model.Status)
+            dbAutoSerwisContext.RepairStatusHistories.Add(new RepairStatusHistory
+            {
+                RepairOrderId = order.Id,
+                OldStatus = order.Status,
+                NewStatus = model.Status,
+                ChangedBy = User.Identity?.Name ?? "System",
+                ChangedAt = DateTime.Now,
+                Comment = Request.Form["StatusComment"]
+            });
+
         order.ClientId = model.ClientId;
         order.VehicleId = model.VehicleId;
         order.EmployeeId = model.EmployeeId;
@@ -117,13 +129,106 @@ public class RepairOrderController : Controller
             {
                 RepairOrderId = order.Id,
                 ServiceId = serviceId,
-                Quantity  = FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]),
+                Quantity = FormParser.Quantity(Request.Form[$"ServiceQty_{serviceId}"]),
                 UnitPrice = FormParser.UnitPrice(Request.Form[$"ServicePrice_{serviceId}"])
             });
 
         dbAutoSerwisContext.SaveChanges();
-
         return RedirectToAction("Index");
+    }
+
+    public IActionResult History(int id)
+    {
+        var order = dbAutoSerwisContext.RepairOrders
+            .Include(r => r.Client)
+            .Include(r => r.Vehicle)
+            .Include(r => r.RepairStatusHistories)
+            .FirstOrDefault(r => r.Id == id);
+        if (order == null) return NotFound();
+
+        ViewBag.OrderId = id;
+        ViewBag.ClientName = order.Client.FirstName + " " + order.Client.LastName;
+        return View(order.RepairStatusHistories.OrderByDescending(h => h.ChangedAt).ToList());
+    }
+
+    public IActionResult Photos(int id)
+    {
+        var order = dbAutoSerwisContext.RepairOrders
+            .Include(r => r.Client)
+            .Include(r => r.RepairPhotos)
+            .FirstOrDefault(r => r.Id == id);
+        if (order == null) return NotFound();
+
+        ViewBag.OrderId = id;
+        ViewBag.ClientName = order.Client.FirstName + " " + order.Client.LastName;
+        return View(order.RepairPhotos.OrderByDescending(p => p.UploadedAt).ToList());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UploadPhoto(int repairOrderId, IFormFile file, string? description)
+    {
+        if (file != null && file.Length > 0)
+        {
+            var uploadsDir = Path.Combine("wwwroot", "uploads", "repairs");
+            Directory.CreateDirectory(uploadsDir);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var fullPath = Path.Combine(uploadsDir, fileName);
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            dbAutoSerwisContext.RepairPhotos.Add(new RepairPhoto
+            {
+                RepairOrderId = repairOrderId,
+                FilePath = $"/uploads/repairs/{fileName}",
+                Description = description,
+                UploadedAt = DateTime.Now
+            });
+            dbAutoSerwisContext.SaveChanges();
+        }
+
+        return RedirectToAction("Photos", new { id = repairOrderId });
+    }
+
+    [HttpPost]
+    public IActionResult DeletePhoto(int id, int repairOrderId)
+    {
+        var photo = dbAutoSerwisContext.RepairPhotos.Find(id);
+        if (photo != null)
+        {
+            var path = Path.Combine("wwwroot", photo.FilePath.TrimStart('/'));
+            if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+            dbAutoSerwisContext.RepairPhotos.Remove(photo);
+            dbAutoSerwisContext.SaveChanges();
+        }
+
+        return RedirectToAction("Photos", new { id = repairOrderId });
+    }
+
+    public IActionResult ExportCsv()
+    {
+        var orders = dbAutoSerwisContext.RepairOrders
+            .Include(r => r.Client)
+            .Include(r => r.Vehicle)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToList();
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Id;Klient;Pojazd;Status;Utworzono;Koszt");
+        foreach (var o in orders)
+        {
+            var klient = $"{o.Client.FirstName} {o.Client.LastName}";
+            var pojazd = $"{o.Vehicle.Brand} {o.Vehicle.Model}";
+            var koszt = o.TotalCost?.ToString("F2", CultureInfo.InvariantCulture) ?? "0.00";
+            sb.AppendLine($"{o.Id};{klient};{pojazd};{o.Status};{o.CreatedAt:yyyy-MM-dd};{koszt}");
+        }
+
+        var bytes = Encoding.UTF8.GetPreamble()
+            .Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+        return File(bytes, "text/csv", $"zlecenia_{DateTime.Now:yyyyMMdd}.csv");
     }
 
     public IActionResult Delete(int id)
@@ -149,4 +254,8 @@ public class RepairOrderController : Controller
         return RedirectToAction("Index");
     }
 
+    public IActionResult TestError()
+    {
+        throw new Exception("Testowy wyjątek - sprawdzenie middleware!");
+    }
 }

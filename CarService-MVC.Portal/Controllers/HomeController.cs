@@ -8,7 +8,9 @@ namespace CarService_MVC.Portal.Controllers;
 
 public class HomeController : PortalBaseController
 {
-    public HomeController(AutoSerwisContext db) : base(db) { }
+    public HomeController(AutoSerwisContext db) : base(db)
+    {
+    }
 
     public IActionResult Index()
     {
@@ -42,8 +44,10 @@ public class HomeController : PortalBaseController
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [Route("Home/Error/{statusCode?}")]
+    public IActionResult Error(int? statusCode)
     {
+        ViewBag.StatusCode = statusCode;
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

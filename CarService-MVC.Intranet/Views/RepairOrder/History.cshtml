@@ -1,0 +1,48 @@
+@model List<RepairStatusHistory>
+@{
+    ViewData["Title"] = "Historia statusów";
+    var labels = new Dictionary<RepairOrderStatus, string>
+    {
+        { RepairOrderStatus.New, "Nowe" },
+        { RepairOrderStatus.InProgress, "W trakcie" },
+        { RepairOrderStatus.Completed, "Zakończone" },
+        { RepairOrderStatus.Cancelled, "Anulowane" },
+        { RepairOrderStatus.Ready, "Gotowe" },
+        { RepairOrderStatus.Released, "Wydane" }
+    };
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Historia statusów — zlecenie #@ViewBag.OrderId (@ViewBag.ClientName)</h3>
+    <a asp-action="Index" class="btn btn-secondary">Powrót</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Brak zmian statusu dla tego zlecenia.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Ze statusu</th>
+            <th>Na status</th>
+            <th>Kto</th>
+            <th>Komentarz</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var h in Model)
+        {
+            <tr>
+                <td>@h.ChangedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td><span class="badge bg-secondary">@labels[h.OldStatus]</span></td>
+                <td><span class="badge bg-primary">@labels[h.NewStatus]</span></td>
+                <td>@h.ChangedBy</td>
+                <td>@(string.IsNullOrEmpty(h.Comment) ? "—" : h.Comment)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

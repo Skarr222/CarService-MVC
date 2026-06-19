@@ -37,6 +37,11 @@
                     <select name="Status" class="form-select" asp-items="ViewBag.Statuses"></select>
                 </div>
                 <div class="col">
+                    <label class="form-label">Komentarz do zmiany statusu (opcjonalnie)</label>
+                    <input type="text" name="StatusComment" class="form-control"
+                           placeholder="np. Czekamy na części" />
+                </div>
+                <div class="col">
                     <label class="form-label">Planowana data</label>
                     <input name="PlannedDate" type="date" class="form-control" value="@Model.PlannedDate?.ToString("yyyy-MM-dd")" />
                 </div>

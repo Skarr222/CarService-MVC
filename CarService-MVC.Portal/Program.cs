@@ -10,13 +10,16 @@ builder.Services.AddDbContext<AutoSerwisContext>(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<CarService_MVC.Portal.Middleware.ExceptionLoggingMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();

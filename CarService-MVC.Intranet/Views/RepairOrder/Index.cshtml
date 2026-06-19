@@ -2,16 +2,21 @@
 @{
     ViewData["Title"] = "Zlecenia napraw";
 }
-
 <div class="table-card">
     <div class="table-header">
         <h5><i class="bi bi-clipboard-check me-2"></i>Lista zleceń</h5>
-        <a asp-action="Create" class="btn btn-primary-custom btn-sm">
-            <i class="bi bi-plus-lg me-1"></i> Dodaj zlecenie
-        </a>
+        <div class="d-flex gap-2">
+            <a asp-action="ExportCsv" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Eksport CSV
+            </a>
+            <a asp-action="Create" class="btn btn-primary-custom btn-sm">
+                <i class="bi bi-plus-lg me-1"></i> Dodaj zlecenie
+            </a>
+        </div>
     </div>
     <form method="get" class="d-flex gap-2 px-3 pb-3">
-        <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Szukaj zlecenia..." />
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm"
+               placeholder="Szukaj zlecenia..."/>
         <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
         @if (!string.IsNullOrEmpty((string?)ViewBag.Search))
         {
@@ -50,13 +55,13 @@
                         @{
                             var (badgeClass, badgeLabel) = order.Status switch
                             {
-                                RepairOrderStatus.New       => ("badge-nowe",       "Nowe"),
-                                RepairOrderStatus.InProgress=> ("badge-wtrakcie",   "W trakcie"),
-                                RepairOrderStatus.Completed => ("badge-gotowe",     "Zakończone"),
-                                RepairOrderStatus.Cancelled => ("badge-anulowane",  "Anulowane"),
-                                RepairOrderStatus.Ready     => ("badge-gotowe",     "Gotowe"),
-                                RepairOrderStatus.Released  => ("badge-wydane",     "Wydane"),
-                                _                           => ("badge-nowe",       ((int)order.Status).ToString())
+                                RepairOrderStatus.New => ("badge-nowe", "Nowe"),
+                                RepairOrderStatus.InProgress => ("badge-wtrakcie", "W trakcie"),
+                                RepairOrderStatus.Completed => ("badge-gotowe", "Zakończone"),
+                                RepairOrderStatus.Cancelled => ("badge-anulowane", "Anulowane"),
+                                RepairOrderStatus.Ready => ("badge-gotowe", "Gotowe"),
+                                RepairOrderStatus.Released => ("badge-wydane", "Wydane"),
+                                _ => ("badge-nowe", ((int)order.Status).ToString())
                             };
                         }
                         <span class="badge-status @badgeClass">@badgeLabel</span>
@@ -64,8 +69,13 @@
                     <td>@order.CreatedAt.ToString("dd.MM.yyyy")</td>
                     <td>@(order.TotalCost.HasValue ? order.TotalCost.Value.ToString("C") : "-")</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@order.Id" class="btn-action edit"><i class="bi bi-pencil"></i></a>
-                        <a asp-action="Delete" asp-route-id="@order.Id" class="btn-action delete"><i class="bi bi-trash"></i></a>
+                        <a asp-action="Edit" asp-route-id="@order.Id" class="btn-action edit"><i
+                                class="bi bi-pencil"></i></a>
+                        <a asp-action="History" asp-route-id="@order.Id" class="btn-action"><i
+                                class="bi bi-clock-history"></i></a>
+                        <a asp-action="Photos" asp-route-id="@order.Id" class="btn-action"><i class="bi bi-images"></i></a>
+                        <a asp-action="Delete" asp-route-id="@order.Id" class="btn-action delete"><i
+                                class="bi bi-trash"></i></a>
                     </td>
                 </tr>
             }
